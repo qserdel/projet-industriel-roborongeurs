@@ -51,8 +51,6 @@ void loop() {
       Serial.println("We have a new client");
       alreadyConnected = true;
     }
-
-    Serial.println("===\nloop\n===");
     if (client.available() > 0) {
       String msg = client.readStringUntil('\n');
       Serial.print("message : ");

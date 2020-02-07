@@ -5,7 +5,6 @@ WiFiClient client;
 
 unsigned long last_time;
 unsigned long time_to_wait;
-String last_cmd;
 String ans;
 
 boolean newData = false;
@@ -19,17 +18,20 @@ void recvWithEndMarker() {
   char rc;
   
   // if (Serial.available() > 0) {
-      while (Serial.available() > 0 && newData == false) {
-        rc = Serial.read();
-        
-        if (rc != endMarker) {
-        receivedChars[ndx] = rc;
-        ndx++;
-        if (ndx >= numChars) {
-        ndx = numChars - 1;
+  while (Serial.available() > 0 && newData == false) {
+    Serial.println("lecture");
+    rc = Serial.read();
+    
+    if (rc != endMarker) {
+    receivedChars[ndx] = rc;
+    ndx++;
+    if (ndx >= numChars) {
+      ndx = numChars - 1;
       }
     }
     else {
+      Serial.print("lu :");
+      Serial .println(ndx);
       receivedChars[ndx] = '\0'; // terminate the string
       ndx = 0;
       newData = true;
@@ -39,6 +41,8 @@ void recvWithEndMarker() {
 
 void setup() {
   Serial.begin(9600);
+
+  
 
   if (WiFi.status() == WL_NO_SHIELD) {
     Serial.println("WiFi shield not present");
@@ -65,8 +69,6 @@ void setup() {
     Serial.println("Connection failed");
     while (true);
   }
-
-  last_cmd = "none";
   last_time = millis();
   time_to_wait = 100;
 }
@@ -74,16 +76,27 @@ void setup() {
 void loop() {
 
   recvWithEndMarker();
-  client.println(last_cmd);
+  if(newData == true){
+    client.println(receivedChars);
+    Serial.println("rec: ");
+    Serial.println(receivedChars);
+    while (Serial.available()> 0) 
+      Serial.read();
+    newData = false;
+  }
+
+  delay(50);
   
   if (client.available()) {
     ans = client.readStringUntil('\n');
+    Serial.println("ans: ");
     Serial.println(ans);
   }
+
   
   delay(50);
   if (WiFi.status() != WL_CONNECTED) {
-  Serial.println(WiFi.status());
-  setup();
+    Serial.println(WiFi.status());
+    setup();
   }
 }
