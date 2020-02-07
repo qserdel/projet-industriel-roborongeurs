@@ -1,9 +1,5 @@
 #include <WiFi101.h>
 
-
-#define PULSE_PIN 6
-#define DIR_PIN 7
-
 WiFiServer server(80);
 char ssid[] = "MKR1000_RATATOUILLE";
 int status = WL_IDLE_STATUS;
@@ -25,9 +21,6 @@ void myHandler(){
 
 
 void setup() {
-  pwm(9, 512, 20000);
-  pinMode(PULSE_PIN, OUTPUT);
-  pinMode(DIR_PIN, OUTPUT);
 
   delay(1000);
   Serial.begin(9600);
@@ -64,24 +57,6 @@ void loop() {
       String msg = client.readStringUntil('\n');
       Serial.print("message : ");
       Serial.println(msg);
-      if (msg.compareTo("left\r") == 0) {
-        digitalWrite(DIR_PIN, LOW);
-        delay(20);
-        analogWrite(PULSE_PIN, 127);
-        Serial.println("PulseUP");
-      }
-      else if (msg.compareTo("right\r") == 0) {
-        digitalWrite(DIR_PIN, HIGH);
-        delay(20);
-        analogWrite(PULSE_PIN, 127);
-        Serial.println("PulseUP");
-      }
-      else {
-        analogWrite(PULSE_PIN, 0);
-        Serial.println("PulseDown");
-      }
     }
-    Serial.println("ack");
-    client.println("ack");
   }
 }

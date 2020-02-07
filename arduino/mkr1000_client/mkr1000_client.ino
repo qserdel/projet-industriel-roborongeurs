@@ -1,12 +1,5 @@
 #include <WiFi101.h>
 
-#define LED_POWER 2
-#define LED_CONNECTED 3
-#define LED_SYNC 4
-
-#define BUTTON_RIGHT 7
-#define BUTTON_LEFT 6
-
 IPAddress server(192, 168, 1, 1);
 WiFiClient client;
 
@@ -15,19 +8,36 @@ unsigned long time_to_wait;
 String last_cmd;
 String ans;
 
+boolean newData = false;
+
+const byte numChars = 100;
+char receivedChars[numChars];
+
+void recvWithEndMarker() {
+  static byte ndx = 0;
+  char endMarker = '\n';
+  char rc;
+  
+  // if (Serial.available() > 0) {
+      while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+        
+        if (rc != endMarker) {
+        receivedChars[ndx] = rc;
+        ndx++;
+        if (ndx >= numChars) {
+        ndx = numChars - 1;
+      }
+    }
+    else {
+      receivedChars[ndx] = '\0'; // terminate the string
+      ndx = 0;
+      newData = true;
+    }
+  }
+}
+
 void setup() {
-  pinMode(LED_POWER, OUTPUT);
-  pinMode(LED_CONNECTED, OUTPUT);
-  pinMode(LED_SYNC, OUTPUT);
-
-  pinMode(BUTTON_LEFT, INPUT_PULLUP);
-  pinMode(BUTTON_RIGHT, INPUT_PULLUP);
-
-  digitalWrite(LED_POWER, HIGH);
-  digitalWrite(LED_CONNECTED, LOW);
-  digitalWrite(LED_SYNC, LOW);
-
-  delay(1000);
   Serial.begin(9600);
 
   if (WiFi.status() == WL_NO_SHIELD) {
@@ -50,7 +60,6 @@ void setup() {
 
   if (client.connect(server, 80)) {
     Serial.println("Connected!");
-    digitalWrite(LED_CONNECTED, HIGH);
   }
   else {
     Serial.println("Connection failed");
@@ -63,39 +72,18 @@ void setup() {
 }
 
 void loop() {
-  if ((millis() - last_time) > time_to_wait) {
-    if (digitalRead(BUTTON_LEFT) == LOW) {
-      time_to_wait = 5000;
-      last_cmd = "left";
-    }
-    else if (digitalRead(BUTTON_RIGHT) == LOW) {
-      time_to_wait = 5000;
-      last_cmd = "right";
-    }
-    else {
-      time_to_wait = 100;
-      last_cmd = "none";
-    }
 
-    Serial.println(last_cmd);
-    client.println(last_cmd);
-    last_time = millis();
-  }
-
+  recvWithEndMarker();
+  client.println(last_cmd);
+  
   if (client.available()) {
     ans = client.readStringUntil('\n');
-    if (ans.compareTo("ack\r") == 0) { // && last_cmd.compareTo("none") != 0) {
-      digitalWrite(LED_SYNC, HIGH);
-    }
-    else {
-      digitalWrite(LED_SYNC, LOW);
-    }
+    Serial.println(ans);
   }
-
+  
   delay(50);
-
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println(WiFi.status());
-    setup();
+  Serial.println(WiFi.status());
+  setup();
   }
 }
