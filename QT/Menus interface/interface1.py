@@ -138,6 +138,8 @@ class MenuConfirmationSuppressionSerie():
         self.buttonSupprimer.clicked.connect(self.supprimerSerie)
         self.buttonAnnuler = interface.findChild(QtWidgets.QPushButton, 'annulerSuppressionSerie')
         self.buttonAnnuler.clicked.connect(self.annulerSuppressionSerie)
+        #informations sur la série à supprimer
+        self.nomSerie = interface.findChild(QtWidgets.QLabel, 'nomSerieASupprimer')
 
     def supprimerSerie(self):
         print('suppression d\'une série pas encore implémentée')
