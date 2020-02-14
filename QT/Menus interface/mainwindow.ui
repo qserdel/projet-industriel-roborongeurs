@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>379</height>
+    <width>852</width>
+    <height>473</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -841,7 +841,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>302</width>
+     <width>852</width>
      <height>22</height>
     </rect>
    </property>

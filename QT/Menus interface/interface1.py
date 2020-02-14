@@ -84,7 +84,7 @@ class MenuResultats():
 
     def accesSuppressionSerie(self):
         print('Accès au menu de supression d\'une série')
-        interface.selector.setCurrentIndex(6)
+        interface.selector.setCurrentIndex(5)
 
 
 #Le menu recapitulatif des parametres d'un pattern existant
@@ -100,11 +100,11 @@ class MenuRecapitulatifPattern():
 
     def accesValidationModificationPattern(self):
         print('Accès au menu de validation de modification d\'un pattern')
-        interface.selector.setCurrentIndex(7)
+        interface.selector.setCurrentIndex(6)
 
     def accesChoixSouris(self):
         print('Accès au menu de choix d\'une souris dans un pattern')
-        interface.selector.setCurrentIndex(6)
+        interface.selector.setCurrentIndex(7)
 
 #Le menu de confirmation de supression d'un pattern existant
 class MenuConfirmationSuppressionSerie():
@@ -150,21 +150,21 @@ class MenuChoixSouris():
 
     def accesEssaiE1(self):
         print('lancement de l\'expérience')
-        interface.selector.setCurrentIndex(10)
+        interface.selector.setCurrentIndex(9)
 
     def accesSuppressionSouris(self):
         print('acces au menu de supression d\'une souris')
-        interface.selector.setCurrentIndex(9)
+        interface.selector.setCurrentIndex(8)
 
 #Le menu de confirmation de supression d'une souris dans un pattern
 class MenuConfirmationSuppressionSouris():
     def __init__(self,interface):
-        print("hey")
+        print("broccoli")
 
 #Le menu de suivi de l'experience, phase à 1 pot
 class MenuEssaiE1():
     def __init__(self,interface):
-        print("hey")
+        print("broccoli")
 
 #Le menu de suivi de l'experience, phase à 2 pots
 class MenuEssaiE2():
