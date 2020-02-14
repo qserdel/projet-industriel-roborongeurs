@@ -1,0 +1,10 @@
+"pattern":"template.json"
+"nom":"template"
+"nbSouris":5
+"nbJours":30
+"nbEssais":5
+"tempsMax":"05:00"
+"entrainement":false
+"série":{
+  
+}

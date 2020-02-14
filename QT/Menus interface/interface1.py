@@ -1,5 +1,18 @@
 import sys
 from PyQt5 import QtWidgets, uic
+#variables globales pour faciliter la navigation entre les menus
+Base = 0
+CreationPattern = 1
+SelectionPattern = 2
+Resultats = 3
+RecapitulatifPattern = 4
+ConfirmationSuppressionSerie = 5
+ConfirmationModificationPattern = 6
+ChoixSouris = 7
+ConfirmationSupressionSouris = 8
+EssaiE1 = 9
+EssaiE2 = 10
+ConfirmationArreterExperience = 11
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
@@ -24,7 +37,7 @@ class Interface(QtWidgets.QMainWindow):
     #Fonction de retour au menu de base, commune à (presque) tous les menus
     def retourMenu(self):
         print('Retour au menu de base')
-        self.selector.setCurrentIndex(0)
+        self.selector.setCurrentIndex(Base)
 
 #Le menu de base
 class MenuBase():
@@ -39,13 +52,13 @@ class MenuBase():
 
     def accesCreationPattern(self):
         print('Accès au menu de création de pattern')
-        interface.selector.setCurrentIndex(1)
+        interface.selector.setCurrentIndex(CreationPattern)
     def accesSelectionPattern(self):
         print('Accès au menu de séléction de pattern')
-        interface.selector.setCurrentIndex(2)
+        interface.selector.setCurrentIndex(SelectionPattern)
     def accesResultats(self):
         print('Accès au menu des résultats')
-        interface.selector.setCurrentIndex(3)
+        interface.selector.setCurrentIndex(Resultats)
 
 #Le menu de création de pattern
 class MenuCreationPattern():
@@ -75,12 +88,20 @@ class MenuSelectionPattern():
         self.buttonRetourMenu.clicked.connect(interface.retourMenu)
         self.buttonSelectionnerPattern = interface.findChild(QtWidgets.QPushButton, 'selectionnerPattern')
         self.buttonSelectionnerPattern.clicked.connect(self.selectionnerPattern)
+        self.buttonSupprimerPattern = interface.findChild(QtWidgets.QPushButton, 'supprimerPattern')
+        self.buttonSupprimerPattern.clicked.connect(self.accesSuppressionPattern)
         #liste des patterns existants
-        self.listePatterns = interface.findChild(QtWidgets.QListWidget,'listePatterns')
+        self.listePatterns = interface.findChild(QtWidgets.QComboBox,'listePattern')
+        #infos du pattern sélectionné
+        self.infoPattern = interface.findChild(QtWidgets.QTableView, 'infoPattern')
 
     def selectionnerPattern(self):
         print('Accès au menu de choix d\'une souris')
-        interface.selector.setCurrentIndex(7)
+        interface.selector.setCurrentIndex(ChoixSouris)
+
+    def accesSuppressionPattern(self):
+        print('Acces au menu de supression de pattern/série')
+        interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
 
 #Le menu d'affichage, d'export et de supression des résultats
 class MenuResultats():
@@ -93,13 +114,13 @@ class MenuResultats():
         self.buttonExportUSB = interface.findChild(QtWidgets.QPushButton, 'exportUSB')
         self.buttonExportUSB.clicked.connect(self.export)
         #liste des séries de résultats
-        self.listeSeries = interface.findChild(QtWidgets.QListWidget,'listeSeries')
+        self.listeSeries = interface.findChild(QtWidgets.QComboBox,'listeSeries')
         #infos de la série de résultats
         self.infoSerie = interface.findChild(QtWidgets.QTableView,'infoSerie')
 
     def accesSuppressionSerie(self):
-        print('Accès au menu de supression d\'une série')
-        interface.selector.setCurrentIndex(5)
+        print('Accès au menu de supression d\'une série/pattern')
+        interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
     def export(self):
         print("l'export n'est pas encore implémenté")
         #à remplir (et ça va être long...)
@@ -125,11 +146,11 @@ class MenuRecapitulatifPattern():
 
     def accesValidationModificationPattern(self):
         print('Accès au menu de validation de modification d\'un pattern')
-        interface.selector.setCurrentIndex(6)
+        interface.selector.setCurrentIndex(ConfirmationModificationPattern)
 
     def accesChoixSouris(self):
         print('Accès au menu de choix d\'une souris dans un pattern')
-        interface.selector.setCurrentIndex(7)
+        interface.selector.setCurrentIndex(ChoixSouris)
 
 #Le menu de confirmation de supression d'un pattern existant
 class MenuConfirmationSuppressionSerie():
@@ -147,7 +168,7 @@ class MenuConfirmationSuppressionSerie():
 
     def annulerSuppressionSerie(self):
         print('retour au menu des résultats')
-        interface.selector.setCurrentIndex(3)
+        interface.selector.setCurrentIndex(Resultats)
 
 #Le menu de confirmation des modifications sur un pattern existant
 class MenuConfirmationModificationPattern():
@@ -159,11 +180,11 @@ class MenuConfirmationModificationPattern():
 
     def modifier(self):
         print('modification d\'un pattern')
-        interface.selector.setCurrentIndex(1)
+        interface.selector.setCurrentIndex(CreationPattern)
 
     def annuler(self):
         print('retour au menu de sélection pattern')
-        interface.selector.setCurrentIndex(2)
+        interface.selector.setCurrentIndex(SelectionPattern)
 
 #Le menu du choix de la souris à exploiter
 class MenuChoixSouris():
@@ -177,11 +198,11 @@ class MenuChoixSouris():
 
     def accesEssaiE1(self):
         print('lancement de l\'expérience')
-        interface.selector.setCurrentIndex(9)
+        interface.selector.setCurrentIndex(EssaiE1)
 
     def accesSuppressionSouris(self):
         print('acces au menu de confirmation de supression d\'une souris')
-        interface.selector.setCurrentIndex(8)
+        interface.selector.setCurrentIndex(ConfirmationSupressionSouris)
 
 #Le menu de confirmation de supression d'une souris dans un pattern
 class MenuConfirmationSuppressionSouris():
@@ -197,7 +218,7 @@ class MenuConfirmationSuppressionSouris():
 
     def retourChoixSouris(self):
         print("retour au menu de sélection de souris")
-        interface.selector.setCurrentIndex(7)
+        interface.selector.setCurrentIndex(ChoixSouris)
 
 #Le menu de suivi de l'experience, phase à 1 pot
 class MenuEssaiE1():
@@ -217,11 +238,11 @@ class MenuEssaiE1():
     def reussite(self):
         print("accès à l'essai suivant")
         print("enregistrement des résultats et placement des pots pas encore implémenté")
-        interface.selector.setCurrentIndex(10)
+        interface.selector.setCurrentIndex(EssaiE2)
 
     def arretExperience(self):
         print("accès au menu de validation de l'arrêt de l'expérience")
-        interface.selector.setCurrentIndex(11)
+        interface.selector.setCurrentIndex(ConfirmationArreterExperience)
 
 #Le menu de suivi de l'experience, phase à 2 pots
 class MenuEssaiE2():
@@ -241,16 +262,16 @@ class MenuEssaiE2():
     def reussite(self):
         print("accès à l'essai suivant")
         print("enregistrement des résultats et placement des pots pas encore implémenté")
-        interface.selector.setCurrentIndex(9)
+        interface.selector.setCurrentIndex(EssaiE1)
 
     def echec(self):
         print("retour à l'essai précédent")
         print("enregistrement des résultats et placement des pots pas encore implémenté")
-        interface.selector.setCurrentIndex(9)
+        interface.selector.setCurrentIndex(EssaiE1)
 
     def arretExperience(self):
         print("accès au menu de validation de l'arrêt de l'expérience")
-        interface.selector.setCurrentIndex(11)
+        interface.selector.setCurrentIndex(ConfirmationArreterExperience)
 
 #Le menu de confirmation de supression d'une souris dans un pattern
 class MenuConfirmationArreterExperience():
@@ -262,7 +283,7 @@ class MenuConfirmationArreterExperience():
 
     def retourExperience(self):
         print("retour à l'expérience en cours")
-        interface.selector.setCurrentIndex(9)
+        interface.selector.setCurrentIndex(EssaiE1)
         #ajouter un retour dynamique
 
 
