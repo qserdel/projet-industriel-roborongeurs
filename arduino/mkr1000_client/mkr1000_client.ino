@@ -19,7 +19,7 @@ void recvWithEndMarker() {
   
   // if (Serial.available() > 0) {
   while (Serial.available() > 0 && newData == false) {
-    Serial.println("lecture");
+    //Serial.println("lecture");
     rc = Serial.read();
     
     if (rc != endMarker) {
@@ -30,8 +30,8 @@ void recvWithEndMarker() {
       }
     }
     else {
-      Serial.print("lu :");
-      Serial .println(ndx);
+      //Serial.print("lu :");
+      //Serial .println(ndx);
       receivedChars[ndx] = '\0'; // terminate the string
       ndx = 0;
       newData = true;
@@ -78,18 +78,21 @@ void loop() {
   recvWithEndMarker();
   if(newData == true){
     client.println(receivedChars);
-    Serial.println("rec: ");
+    Serial.println("serial: ");
     Serial.println(receivedChars);
+    /*
     while (Serial.available()> 0) 
       Serial.read();
+      */
     newData = false;
   }
 
+  //Serial.println("loop");
   delay(50);
   
   if (client.available()) {
     ans = client.readStringUntil('\n');
-    Serial.println("ans: ");
+    Serial.println("wifi: ");
     Serial.println(ans);
   }
 
