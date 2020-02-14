@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>852</width>
-    <height>473</height>
+    <width>606</width>
+    <height>359</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -27,6 +27,12 @@
           <property name="enabled">
            <bool>true</bool>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
           <property name="text">
            <string>Création de pattern</string>
           </property>
@@ -34,6 +40,12 @@
         </item>
         <item>
          <widget class="QPushButton" name="accesResultats">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
           <property name="text">
            <string>Résultats</string>
           </property>
@@ -41,6 +53,12 @@
         </item>
         <item>
          <widget class="QPushButton" name="accesSelectionPattern">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
           <property name="text">
            <string>Séléction de pattern</string>
           </property>
@@ -59,6 +77,12 @@
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>Nom</string>
           </property>
@@ -66,6 +90,12 @@
         </item>
         <item row="0" column="0" colspan="2">
          <widget class="QLabel" name="label_6">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
           <property name="text">
            <string>Création de pattern</string>
           </property>
@@ -82,7 +112,14 @@
          <widget class="QSpinBox" name="cadreNombreSouris"/>
         </item>
         <item row="2" column="1">
-         <widget class="QPlainTextEdit" name="cadreNomPattern"/>
+         <widget class="QPlainTextEdit" name="cadreNomPattern">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_4">
@@ -96,6 +133,12 @@
         </item>
         <item row="16" column="1">
          <widget class="QPushButton" name="retourMenuCreationPattern">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Retour menu</string>
           </property>
@@ -112,7 +155,13 @@
          </widget>
         </item>
         <item row="16" column="0">
-         <widget class="QPushButton" name="pushButton_13">
+         <widget class="QPushButton" name="validerCreationPattern">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Valider</string>
           </property>
@@ -154,7 +203,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QPushButton" name="pushButton_14">
+         <widget class="QPushButton" name="selectionnerPattern">
           <property name="text">
            <string>Selectionner</string>
           </property>
@@ -176,6 +225,12 @@
         </item>
         <item row="0" column="0" colspan="2">
          <widget class="QLabel" name="label_7">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="text">
            <string>Sélection de pattern</string>
           </property>
@@ -224,7 +279,19 @@
          </widget>
         </item>
         <item row="4" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_15">
+         <widget class="QPushButton" name="exportUSB">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
           <property name="text">
            <string>Exporter vers USB</string>
           </property>
@@ -237,7 +304,7 @@
         <item row="13" column="1">
          <widget class="QPushButton" name="retourMenuRecapitulatifPattern">
           <property name="text">
-           <string>Retour menu</string>
+           <string>Retour Menu</string>
           </property>
          </widget>
         </item>
@@ -277,7 +344,7 @@
          </widget>
         </item>
         <item row="6" column="1">
-         <widget class="QLabel" name="label_20">
+         <widget class="QLabel" name="tempsMaxRecapitulatif">
           <property name="text">
            <string>00:00</string>
           </property>
@@ -291,7 +358,7 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLabel" name="label_17">
+         <widget class="QLabel" name="nbSourisRecapitulatif">
           <property name="text">
            <string>00</string>
           </property>
@@ -312,7 +379,7 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QLabel" name="label_18">
+         <widget class="QLabel" name="nbJoursRecapitulatif">
           <property name="text">
            <string>00</string>
           </property>
@@ -326,7 +393,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLabel" name="label_16">
+         <widget class="QLabel" name="nomRecapitulatif">
           <property name="text">
            <string>xxx</string>
           </property>
@@ -340,23 +407,29 @@
          </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QLabel" name="label_19">
+         <widget class="QLabel" name="nbEssaisRecapitulatif">
           <property name="text">
            <string>00</string>
           </property>
          </widget>
         </item>
         <item row="7" column="1">
-         <widget class="QLabel" name="label_21">
+         <widget class="QLabel" name="modeEntrainementRecapitulatif">
           <property name="text">
            <string>oui/non</string>
           </property>
          </widget>
         </item>
         <item row="9" column="0" colspan="2">
-         <widget class="QPushButton" name="selectionnerPattern">
+         <widget class="QPushButton" name="continuerExperience">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
-           <string>Selectionner pattern</string>
+           <string>Continuer l'expérience</string>
           </property>
          </widget>
         </item>
@@ -372,7 +445,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLabel" name="label_23">
+         <widget class="QLabel" name="nomSerieASupprimer">
           <property name="text">
            <string>xxx</string>
           </property>
@@ -380,6 +453,15 @@
         </item>
         <item row="1" column="0" colspan="2">
          <widget class="QTextBrowser" name="textBrowser">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
           <property name="html">
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -397,6 +479,12 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="3" column="0">
          <widget class="QPushButton" name="validerSuppressionSerie">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Supprimer</string>
           </property>
@@ -404,6 +492,12 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="3" column="1">
          <widget class="QPushButton" name="annulerSuppressionSerie">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Annuler</string>
           </property>
@@ -446,6 +540,12 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="3" column="1">
          <widget class="QPushButton" name="validerModificationPattern">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Modifier</string>
           </property>
@@ -453,6 +553,12 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="3" column="2">
          <widget class="QPushButton" name="annulerModificationPattern">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Annuler</string>
           </property>
@@ -513,6 +619,12 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="4" column="0" colspan="2">
          <widget class="QPushButton" name="choisirSouris">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Choisir souris</string>
           </property>
@@ -530,7 +642,13 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QPushButton" name="pushButton_12">
+         <widget class="QPushButton" name="annulerSupressionSouris">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Annuler</string>
           </property>
@@ -560,7 +678,13 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QPushButton" name="pushButton_11">
+         <widget class="QPushButton" name="validerSupressionSouris">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>Supprimer</string>
           </property>
@@ -578,7 +702,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="9" column="1">
-         <widget class="QPushButton" name="pushButton_23">
+         <widget class="QPushButton" name="echecE1">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -595,12 +719,12 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="10" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_18">
+         <widget class="QPushButton" name="arreterExperienceE1">
           <property name="enabled">
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Annuler expérience</string>
+           <string>Arrêter expérience</string>
           </property>
          </widget>
         </item>
@@ -615,7 +739,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="8" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_16">
+         <widget class="QPushButton" name="tempsEcouleE1">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -646,7 +770,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="9" column="0">
-         <widget class="QPushButton" name="pushButton_17">
+         <widget class="QPushButton" name="reussiteE1">
           <property name="text">
            <string>Réussite</string>
           </property>
@@ -709,7 +833,7 @@ p, li { white-space: pre-wrap; }
       <widget class="QWidget" name="page_7">
        <layout class="QGridLayout" name="gridLayout_9">
         <item row="10" column="0">
-         <widget class="QPushButton" name="pushButton_19">
+         <widget class="QPushButton" name="reussiteE2">
           <property name="text">
            <string>Réussite</string>
           </property>
@@ -751,7 +875,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="10" column="1">
-         <widget class="QPushButton" name="pushButton_20">
+         <widget class="QPushButton" name="echecE2">
           <property name="text">
            <string>Echec</string>
           </property>
@@ -779,14 +903,14 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="11" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_22">
+         <widget class="QPushButton" name="arreterExperienceE2">
           <property name="text">
-           <string>Annuler expérience</string>
+           <string>Arrêter expérience</string>
           </property>
          </widget>
         </item>
         <item row="8" column="0" colspan="2">
-         <widget class="QPushButton" name="pushButton_21">
+         <widget class="QPushButton" name="tempsEcouleE2">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -832,6 +956,59 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page_8">
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="3" column="1">
+         <widget class="QPushButton" name="annulerArretExperience">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Annuler</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="validerArretExperience">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Valider</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QTextBrowser" name="textBrowser_4">
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Voulez vous vraiment &lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;arrêter l'expérience?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_53">
+          <property name="text">
+           <string>Arreter l'expérience</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -841,13 +1018,15 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>852</width>
+     <width>606</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="imageRoborongeurs.qrc"/>
+ </resources>
  <connections/>
 </ui>
