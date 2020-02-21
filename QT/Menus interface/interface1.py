@@ -168,7 +168,7 @@ class MenuConfirmationSuppressionSerie():
 
     def annulerSuppressionSerie(self):
         print('retour au menu des résultats')
-        interface.selector.setCurrentIndex(Resultats)
+        interface.selector.setCurrentIndex(Base)
 
 #Le menu de confirmation des modifications sur un pattern existant
 class MenuConfirmationModificationPattern():

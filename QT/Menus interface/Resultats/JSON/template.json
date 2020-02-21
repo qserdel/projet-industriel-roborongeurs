@@ -2,9 +2,36 @@
 "nom":"template"
 "nbSouris":5
 "nbJours":30
-"nbEssais":5
+"nbEssais":2
 "tempsMax":"05:00"
 "entrainement":false
-"série":{
-  
-}
+"dateDebut": "15/02/2020"
+"souris":[
+  "souris1":{
+    "EssaiT1E1":{
+      "pot1":3.5
+      "pot2":null
+      "reussite":true
+      "temps":"03:20"
+    },
+    "EssaiT1E2":{
+      "pot1":3.5
+      "pot2":7.5
+      "reussite":true
+      "temps":"04:20"
+    },
+    "EssaiT2E1":{
+      "pot1":3.5
+      "pot2":null
+      "reussite":true
+      "temps":"03:00"
+    },
+    "EssaiT2E2":{
+      "pot1":3.5
+      "pot2":4.5
+      "reussite":false
+      "temps":"05:00"
+    }    
+  }
+
+]

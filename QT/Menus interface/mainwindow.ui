@@ -18,7 +18,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>12</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -86,18 +86,8 @@
       </widget>
       <widget class="QWidget" name="Menu_creation_pattern">
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Nombre de souris     </string>
-          </property>
-         </widget>
+        <item row="9" column="3">
+         <widget class="QTimeEdit" name="cadreTempsMax"/>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label">
@@ -112,6 +102,9 @@
           </property>
          </widget>
         </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="cadreNombreSouris"/>
+        </item>
         <item row="0" column="0" colspan="2">
          <widget class="QLabel" name="label_6">
           <property name="maximumSize">
@@ -125,11 +118,18 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="3">
-         <widget class="QTimeEdit" name="cadreTempsMax"/>
-        </item>
-        <item row="4" column="1">
-         <widget class="QSpinBox" name="cadreNombreSouris"/>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Nombre de souris     </string>
+          </property>
+         </widget>
         </item>
         <item row="9" column="1">
          <widget class="QSpinBox" name="cadreNombreEssais"/>
@@ -184,13 +184,6 @@
         <item row="4" column="3">
          <widget class="QSpinBox" name="cadreNombreJours"/>
         </item>
-        <item row="15" column="0">
-         <widget class="QCheckBox" name="checkModeEntrainement">
-          <property name="text">
-           <string>Mode entrainement</string>
-          </property>
-         </widget>
-        </item>
         <item row="16" column="0" colspan="4">
          <widget class="Line" name="line_5">
           <property name="orientation">
@@ -212,6 +205,32 @@
             <width>16777215</width>
             <height>30</height>
            </size>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="0" colspan="2">
+         <widget class="QPushButton" name="placementDesPots">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Placement des pots</string>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="2" colspan="2">
+         <widget class="QCheckBox" name="checkModeEntrainement">
+          <property name="text">
+           <string>Mode entrainement</string>
           </property>
          </widget>
         </item>
@@ -1279,6 +1298,106 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="openExternalLinks">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_9">
+       <layout class="QGridLayout" name="gridLayout_13">
+        <item row="2" column="0">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>Placement des pots</string>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="0">
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Valider</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="QComboBox" name="comboBox">
+          <item>
+           <property name="text">
+            <string>Essai T1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Essai T2</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_20">
+          <property name="text">
+           <string>Pot2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QSlider" name="horizontalSlider_2">
+          <property name="maximum">
+           <number>12</number>
+          </property>
+          <property name="sliderPosition">
+           <number>6</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksAbove</enum>
+          </property>
+          <property name="tickInterval">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_19">
+          <property name="text">
+           <string>Pot1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+        </item>
+        <item row="6" column="0">
+         <widget class="QSlider" name="horizontalSlider">
+          <property name="maximum">
+           <number>12</number>
+          </property>
+          <property name="value">
+           <number>6</number>
+          </property>
+          <property name="sliderPosition">
+           <number>6</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBothSides</enum>
+          </property>
+          <property name="tickInterval">
+           <number>1</number>
           </property>
          </widget>
         </item>
