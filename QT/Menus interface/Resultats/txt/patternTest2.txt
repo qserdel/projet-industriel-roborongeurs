@@ -1,0 +1,84 @@
+Pattern: patternTest2
+________________________________________
+nombre de souris: 4
+nombre de jours: 15
+nombre d'essais par experience: 15
+mode: expérimentation
+temps maximum: 05:30
+date de début: 22/02/2020
+________________________________________
+ souris s0 :
+
+    | essai T0E1| 
+    _____________
+    | essai T0E2| 
+    _____________
+    | essai T1E1| 
+    _____________
+    | essai T1E2| 
+    _____________
+    | essai T2E1| 
+    _____________
+    | essai T2E2| 
+    _____________
+    | essai T3E1| 
+    _____________
+    | essai T3E2| 
+    _____________
+
+ souris s1 :
+
+    | essai T0E1| 
+    _____________
+    | essai T0E2| 
+    _____________
+    | essai T1E1| 
+    _____________
+    | essai T1E2| 
+    _____________
+    | essai T2E1| 
+    _____________
+    | essai T2E2| 
+    _____________
+    | essai T3E1| 
+    _____________
+    | essai T3E2| 
+    _____________
+
+ souris s2 :
+
+    | essai T0E1| 
+    _____________
+    | essai T0E2| 
+    _____________
+    | essai T1E1| 
+    _____________
+    | essai T1E2| 
+    _____________
+    | essai T2E1| 
+    _____________
+    | essai T2E2| 
+    _____________
+    | essai T3E1| 
+    _____________
+    | essai T3E2| 
+    _____________
+
+ souris s3 :
+
+    | essai T0E1| 
+    _____________
+    | essai T0E2| 
+    _____________
+    | essai T1E1| 
+    _____________
+    | essai T1E2| 
+    _____________
+    | essai T2E1| 
+    _____________
+    | essai T2E2| 
+    _____________
+    | essai T3E1| 
+    _____________
+    | essai T3E2| 
+    _____________

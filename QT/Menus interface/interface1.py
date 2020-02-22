@@ -1,5 +1,6 @@
 import sys
 from PyQt5 import QtWidgets, uic
+from gestionStockage import *
 #variables globales pour faciliter la navigation entre les menus
 Base = 0
 CreationPattern = 1
@@ -13,11 +14,13 @@ ConfirmationSupressionSouris = 8
 EssaiE1 = 9
 EssaiE2 = 10
 ConfirmationArreterExperience = 11
+PlacementPots = 12
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
     def __init__(self):
         super(Interface, self).__init__()
+        self.dictPatterns=loadAllPatterns()
         uic.loadUi('mainwindow.ui', self)
         self.selector = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget')
         self.menuBase = MenuBase(self)
@@ -32,12 +35,17 @@ class Interface(QtWidgets.QMainWindow):
         self.menuEssaiE1 = MenuEssaiE1(self)
         self.menuEssaiE2 = MenuEssaiE2(self)
         self.menuConfirmationArreterExperience = MenuConfirmationArreterExperience(self)
+        #tous les patterns déjà créés
         self.retourMenu()
 
     #Fonction de retour au menu de base, commune à (presque) tous les menus
     def retourMenu(self):
         print('Retour au menu de base')
         self.selector.setCurrentIndex(Base)
+
+    #mets à jour tous les patterns
+    def updatePatterns(self):
+        self.dictPatterns=loadAllPatterns()
 
 #Le menu de base
 class MenuBase():
@@ -51,11 +59,13 @@ class MenuBase():
         self.buttonAccesSelectionPattern.clicked.connect(self.accesSelectionPattern)
 
     def accesCreationPattern(self):
+        interface.menuCreationPattern.clearAll()
         print('Accès au menu de création de pattern')
         interface.selector.setCurrentIndex(CreationPattern)
     def accesSelectionPattern(self):
         print('Accès au menu de séléction de pattern')
         interface.selector.setCurrentIndex(SelectionPattern)
+        interface.menuSelectionPattern.afficherListePattern(interface)
     def accesResultats(self):
         print('Accès au menu des résultats')
         interface.selector.setCurrentIndex(Resultats)
@@ -77,8 +87,34 @@ class MenuCreationPattern():
         self.checkModeEntrainement = interface.findChild(QtWidgets.QCheckBox,'checkModeEntrainement')
 
     def creerPattern(self):
-        print("création de pattern pas encore implémentée")
+        #méthode partiellement fonctionnelle à teminer
+        nom=self.cadreNom.toPlainText()
+        nbSouris=self.cadreNombreSouris.value()
+        nbJours=self.cadreNombreJours.value()
+        nbJours=self.cadreNombreJours.value()
+        #nbEssais=self.cadreNombreEssais.value #à mettre quand j'aurais géré la création auto de tableau
+        nbEssais=2
+        tempsMax=self.cadreTempsMax.time().toString("hh:mm") #l'affichage donne hh:mm mais on s'en sert comme mm:ss
+        entrainement=self.checkModeEntrainement.isChecked()
+        #ajouter la gestion du tableau de placement
+        if(entrainement):
+            placementPots=[[0],[0]]
+        else:
+            placementPots=[[0,1],[0,1]]
+        pattern=Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
+        savePattern(pattern)
+        print(pattern.affichage())
+        interface.updatePatterns()
         interface.retourMenu()
+
+    #vide toutes les cases de ce menu
+    def clearAll(self):
+        self.cadreNom.clear()
+        self.cadreNombreSouris.setValue(0)
+        self.cadreNombreJours.setValue(0)
+        self.cadreNombreEssais.setValue(0)
+        self.cadreTempsMax.clear()
+        self.checkModeEntrainement.setChecked(False)
 
 #Le menu de sélection de pattern existant
 class MenuSelectionPattern():
@@ -93,15 +129,30 @@ class MenuSelectionPattern():
         #liste des patterns existants
         self.listePatterns = interface.findChild(QtWidgets.QComboBox,'listePattern')
         #infos du pattern sélectionné
-        self.infoPattern = interface.findChild(QtWidgets.QTableView, 'infoPattern')
+        self.infoPattern = interface.findChild(QtWidgets.QLabel, 'infoPattern')
+        #affichage de la liste des patterns enregistrés et des infos du pattern selectionné
+        self.afficherListePattern(interface)
+        self.listePatterns.currentIndexChanged.connect(self.afficherInfoPattern)
+
 
     def selectionnerPattern(self):
+        nomPattern=self.listePatterns.currentText()
         print('Accès au menu de choix d\'une souris')
         interface.selector.setCurrentIndex(ChoixSouris)
 
     def accesSuppressionPattern(self):
         print('Acces au menu de supression de pattern/série')
         interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
+
+    def afficherListePattern(self,interface):
+        self.listePatterns.clear()
+        for nomPattern in interface.dictPatterns:
+            self.listePatterns.addItem(interface.dictPatterns[nomPattern].nom)
+
+    def afficherInfoPattern(self):
+        pattern=interface.dictPatterns[self.listePatterns.currentText()+".json"]
+        self.infoPattern.setText(pattern.affichage())
+
 
 #Le menu d'affichage, d'export et de supression des résultats
 class MenuResultats():
@@ -285,7 +336,6 @@ class MenuConfirmationArreterExperience():
         print("retour à l'expérience en cours")
         interface.selector.setCurrentIndex(EssaiE1)
         #ajouter un retour dynamique
-
 
 app = QtWidgets.QApplication(sys.argv)
 interface = Interface()

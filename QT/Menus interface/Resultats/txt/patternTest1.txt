@@ -1,0 +1,30 @@
+Pattern: patternTest1
+________________________________________
+nombre de souris: 2
+nombre de jours: 5
+nombre d'essais par experience: 5
+mode: entrainement
+temps maximum: 03:00
+date de début: 22/02/2020
+________________________________________
+ souris s0 :
+
+    | essai T0E1| 
+    _____________
+    | essai T1E1| 
+    _____________
+    | essai T2E1| 
+    _____________
+    | essai T3E1| 
+    _____________
+
+ souris s1 :
+
+    | essai T0E1| 
+    _____________
+    | essai T1E1| 
+    _____________
+    | essai T2E1| 
+    _____________
+    | essai T3E1| 
+    _____________

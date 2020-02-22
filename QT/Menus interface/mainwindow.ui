@@ -18,7 +18,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>12</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -87,7 +87,15 @@
       <widget class="QWidget" name="Menu_creation_pattern">
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="9" column="3">
-         <widget class="QTimeEdit" name="cadreTempsMax"/>
+         <widget class="QTimeEdit" name="cadreTempsMax">
+          <property name="time">
+           <time>
+            <hour>0</hour>
+            <minute>0</minute>
+            <second>0</second>
+           </time>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label">
@@ -206,6 +214,12 @@
             <height>30</height>
            </size>
           </property>
+          <property name="documentTitle">
+           <string/>
+          </property>
+          <property name="plainText">
+           <string/>
+          </property>
          </widget>
         </item>
         <item row="15" column="0" colspan="2">
@@ -250,23 +264,6 @@
            <string>Retour menu</string>
           </property>
          </widget>
-        </item>
-        <item row="2" column="1" rowspan="2">
-         <widget class="QComboBox" name="listePattern">
-          <item>
-           <property name="text">
-            <string>pattern exemple 1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>pattern exemple 2</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="4" column="0" colspan="2">
-         <widget class="QTableView" name="infoPattern"/>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_7">
@@ -327,6 +324,23 @@
           </property>
          </widget>
         </item>
+        <item row="3" column="0" rowspan="2" colspan="2">
+         <widget class="QLabel" name="infoPattern">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="listePattern">
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="Menu_export_resultats">
@@ -384,18 +398,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QComboBox" name="listeSeries">
-          <item>
-           <property name="text">
-            <string>Série exemple 1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Série exemple 2</string>
-           </property>
-          </item>
-         </widget>
+         <widget class="QComboBox" name="listeSeries"/>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_16">
