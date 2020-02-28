@@ -5,26 +5,26 @@ nombre de jours: 5
 nombre d'essais par experience: 5
 mode: entrainement
 temps maximum: 03:00
-date de début: 22/02/2020
+date de début: 28/02/2020
 ________________________________________
  souris s0 :
 
-    | essai T0E1| 
-    _____________
-    | essai T1E1| 
-    _____________
-    | essai T2E1| 
-    _____________
-    | essai T3E1| 
-    _____________
+    | essai T0E1| issue: pas commencé| temps: 00:00| pot1: -3| 
+    ___________________________________________________
+    | essai T1E1| issue: pas commencé| temps: 00:00| pot1: -4| 
+    ___________________________________________________
+    | essai T2E1| issue: pas commencé| temps: 00:00| pot1: 0| 
+    ___________________________________________________
+    | essai T3E1| issue: pas commencé| temps: 00:00| pot1: 2| 
+    ___________________________________________________
 
  souris s1 :
 
-    | essai T0E1| 
-    _____________
-    | essai T1E1| 
-    _____________
-    | essai T2E1| 
-    _____________
-    | essai T3E1| 
-    _____________
+    | essai T0E1| issue: pas commencé| temps: 00:00| pot1: -3| 
+    ___________________________________________________
+    | essai T1E1| issue: pas commencé| temps: 00:00| pot1: -4| 
+    ___________________________________________________
+    | essai T2E1| issue: pas commencé| temps: 00:00| pot1: 0| 
+    ___________________________________________________
+    | essai T3E1| issue: pas commencé| temps: 00:00| pot1: 2| 
+    ___________________________________________________

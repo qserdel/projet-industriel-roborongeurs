@@ -300,5 +300,5 @@ def testCreationPattern2():
         print(cle)
         print(dictTest[cle].affichage())
 
-testCreationPattern()
-testCreationPattern2()
+#testCreationPattern()
+#testCreationPattern2()

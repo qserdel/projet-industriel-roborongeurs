@@ -170,23 +170,29 @@ class MenuResultats():
         #liste des séries de résultats
         self.listeSeries = interface.findChild(QtWidgets.QComboBox,'listeSeries')
         #infos de la série de résultats
-        self.infoSerie = interface.findChild(QtWidgets.QTableView,'infoSerie')
+        self.infoSerie = interface.findChild(QtWidgets.QLabel,'infoSerie')
+        #affichage de la liste des patterns enregistrés et des infos du pattern selectionné
+        self.afficherListeSerie(interface)
+        self.listeSeries.currentIndexChanged.connect(self.afficherInfoSerie)
 
     def accesSuppressionSerie(self):
         print('Accès au menu de supression d\'une série/pattern')
         interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
     def export(self):
-        print("l'export n'est pas encore implémenté")
-        #TODO à remplir (et ça va être long...)
+        transcriptionTxt(interface.patternActuel)
+        print("l'export USB n'est pas encore implémenté")
+        #TODO implémenter la détection USB (et ça va être long...)
 
     def afficherListeSerie(self,interface):
         self.listeSeries.clear()
         for nomPattern in interface.dictPatterns:
-            self.listeSerie.addItem(interface.dictPatterns[nomPattern].nom)
+            self.listeSeries.addItem(interface.dictPatterns[nomPattern].nom)
 
     def afficherInfoSerie(self):
-        interface.patternActuel=interface.dictPatterns[self.listeSerie.currentText()+".json"]
-        self.infoSerie.setText(interface.patternActuel.affichage())
+        texte=self.listeSeries.currentText()
+        if(texte!=''):
+            interface.patternActuel=interface.dictPatterns[texte+".json"]
+            self.infoSerie.setText(interface.patternActuel.affichage())
 
 
 #Le menu recapitulatif des parametres d'un pattern existant
