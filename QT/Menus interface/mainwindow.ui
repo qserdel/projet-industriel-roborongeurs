@@ -18,7 +18,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>12</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -1308,53 +1308,8 @@ p, li { white-space: pre-wrap; }
       </widget>
       <widget class="QWidget" name="page_9">
        <layout class="QGridLayout" name="gridLayout_13">
-        <item row="2" column="0">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_18">
-          <property name="text">
-           <string>Placement des pots</string>
-          </property>
-         </widget>
-        </item>
-        <item row="12" column="0">
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Valider</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="0">
-         <widget class="QComboBox" name="comboBox">
-          <item>
-           <property name="text">
-            <string>Essai T1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Essai T2</string>
-           </property>
-          </item>
-         </widget>
-        </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="label_20">
-          <property name="text">
-           <string>Pot2</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QSlider" name="horizontalSlider_2">
+         <widget class="QSlider" name="sliderPlacementPot1">
           <property name="maximum">
            <number>12</number>
           </property>
@@ -1372,18 +1327,42 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="label_19">
           <property name="text">
            <string>Pot1</string>
           </property>
          </widget>
         </item>
+        <item row="3" column="0">
+         <widget class="QDoubleSpinBox" name="boxPlacementPot1"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>Placement des pots</string>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="0">
+         <widget class="QPushButton" name="validerPlacementPots">
+          <property name="text">
+           <string>Valider</string>
+          </property>
+         </widget>
+        </item>
         <item row="5" column="0">
-         <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+         <widget class="QLabel" name="label_20">
+          <property name="text">
+           <string>Pot2</string>
+          </property>
+         </widget>
         </item>
         <item row="6" column="0">
-         <widget class="QSlider" name="horizontalSlider">
+         <widget class="QDoubleSpinBox" name="boxPlacementPot2"/>
+        </item>
+        <item row="7" column="0">
+         <widget class="QSlider" name="sliderPlacementPot2">
           <property name="maximum">
            <number>12</number>
           </property>
@@ -1402,6 +1381,20 @@ p, li { white-space: pre-wrap; }
           <property name="tickInterval">
            <number>1</number>
           </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QComboBox" name="selecteurEssai">
+          <item>
+           <property name="text">
+            <string>Essai T1</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Essai T2</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

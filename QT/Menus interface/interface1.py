@@ -35,6 +35,7 @@ class Interface(QtWidgets.QMainWindow):
         self.menuEssaiE1 = MenuEssaiE1(self)
         self.menuEssaiE2 = MenuEssaiE2(self)
         self.menuConfirmationArreterExperience = MenuConfirmationArreterExperience(self)
+        self.menuPlacementPots = MenuPlacementPots(self)
         #tous les patterns déjà créés
         self.retourMenu()
 
@@ -136,7 +137,7 @@ class MenuSelectionPattern():
 
 
     def selectionnerPattern(self):
-        nomPattern=self.listePatterns.currentText()
+        #TODO mettre l'affichage du nom pattern et des souris
         print('Accès au menu de choix d\'une souris')
         interface.selector.setCurrentIndex(ChoixSouris)
 
@@ -150,8 +151,10 @@ class MenuSelectionPattern():
             self.listePatterns.addItem(interface.dictPatterns[nomPattern].nom)
 
     def afficherInfoPattern(self):
-        pattern=interface.dictPatterns[self.listePatterns.currentText()+".json"]
-        self.infoPattern.setText(pattern.affichage())
+        texte=self.listePatterns.currentText()
+        if(texte!=''):
+            interface.patternActuel=interface.dictPatterns[texte+".json"]
+            self.infoPattern.setText(interface.patternActuel.affichage())
 
 
 #Le menu d'affichage, d'export et de supression des résultats
@@ -174,7 +177,16 @@ class MenuResultats():
         interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
     def export(self):
         print("l'export n'est pas encore implémenté")
-        #à remplir (et ça va être long...)
+        #TODO à remplir (et ça va être long...)
+
+    def afficherListeSerie(self,interface):
+        self.listeSeries.clear()
+        for nomPattern in interface.dictPatterns:
+            self.listeSerie.addItem(interface.dictPatterns[nomPattern].nom)
+
+    def afficherInfoSerie(self):
+        interface.patternActuel=interface.dictPatterns[self.listeSerie.currentText()+".json"]
+        self.infoSerie.setText(interface.patternActuel.affichage())
 
 
 #Le menu recapitulatif des parametres d'un pattern existant
@@ -214,7 +226,10 @@ class MenuConfirmationSuppressionSerie():
         self.nomSerie = interface.findChild(QtWidgets.QLabel, 'nomSerieASupprimer')
 
     def supprimerSerie(self):
-        print('suppression d\'une série pas encore implémentée')
+        path="Resultats/json/"+interface.patternActuel.nom+".json"
+        print('suppression du pattern/série: '+path)
+        os.remove(path)
+        interface.dictPatterns=loadAllPatterns()
         self.annulerSuppressionSerie()
 
     def annulerSuppressionSerie(self):
@@ -336,6 +351,10 @@ class MenuConfirmationArreterExperience():
         print("retour à l'expérience en cours")
         interface.selector.setCurrentIndex(EssaiE1)
         #ajouter un retour dynamique
+
+class MenuPlacementPots():
+    def __init__(self,interface):
+        print("rien")
 
 app = QtWidgets.QApplication(sys.argv)
 interface = Interface()

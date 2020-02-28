@@ -1,8 +1,12 @@
-#TODO afficher le nom des fichiers stockés dans l'interface
+#TODO afficher les patterns dans les Resultats
+#TODO resize l'affichage dans selection pattern
+#TODO supression de patterns/resultats
+#TODO créer le txt avec le bouton export
+#TODO gestion du placement des pots
+#TODO temps init à 05:00
 
 import os
 import time
-import pickle
 import json
 
 class Souris():
@@ -35,6 +39,7 @@ class EssaiE1():
     temps="00:00"
     placementPot1=0
     issue=0
+    isE2=False;
 
     def __init__(self,placementPot1):
         self.placementPot1=placementPot1
@@ -58,11 +63,17 @@ class EssaiE1():
         }
         return essaiE1Json
 
+    def issueToString(self):
+        if(self.issue==0): return "pas commencé"
+        if(self.issue==1): return "   réussi   "
+        if(self.issue==2): return "temps écoulé"
+
 class EssaiE2():
     temps="00:00"
     placementPot1=0
     placementPot2=0
     issue=0
+    isE2=True;
 
     def __init__(self,placementPot1,placementPot2):
         self.placementPot1=placementPot1
@@ -88,6 +99,12 @@ class EssaiE2():
         "issue":self.issue
         }
         return essaiE2Json
+
+    def issueToString(self):
+            if(self.issue==0): return "pas commencé"
+            if(self.issue==1): return "   réussi   "
+            if(self.issue==2): return "temps écoulé"
+            if(self.issue==3): return "   échoué   "
 
 class Pattern():
 
@@ -185,8 +202,10 @@ def loadPattern(nomFichier):
             essai=souris["essaiDict"][nomEssai]
             if(essai["isE2"]):
                 dictEssais[nomEssai]=EssaiE2(essai["placementPot1"],essai["placementPot2"])
+                dictEssais[nomEssai].isE2=True
             else:
                 dictEssais[nomEssai]=EssaiE1(essai["placementPot1"])
+                dictEssais[nomEssai].isE2=False
             dictEssais[nomEssai].temps=essai["temps"]
             dictEssais[nomEssai].issue=essai["issue"]
         dictSouris[nomSouris]=Souris(nomSouris)
@@ -205,6 +224,7 @@ def loadAllPatterns():
     listeFichiersPatterns=os.listdir(path)
     print(listeFichiersPatterns)
     for nomPattern in listeFichiersPatterns:
+        print(nomPattern)
         dictPatterns[nomPattern]=loadPattern(nomPattern)
     return dictPatterns
 
@@ -226,10 +246,15 @@ def transcriptionTxt(pattern):
     for nomSouris in pattern.dictSouris:
         texte+="\n souris "+nomSouris+" :\n"
         for nomEssai in pattern.dictSouris[nomSouris].dictEssais:
+            essai = pattern.dictSouris[nomSouris].dictEssais[nomEssai]
             texte+="\n    | essai "+nomEssai+"| "
-            texte+="\n    _____________"
+            texte+="issue: "+essai.issueToString()+"| "
+            texte+="temps: "+essai.temps+"| "
+            texte+="pot1: "+str(essai.placementPot1)+"| "
+            if(essai.isE2):
+                texte+="pot2: "+str(essai.placementPot2)+"| "
+            texte+="\n    ___________________________________________________"
         texte+="\n"
-    #TODO à continuer...
     fichierTxt.write(texte)
     fichierTxt.close()
 
@@ -275,5 +300,5 @@ def testCreationPattern2():
         print(cle)
         print(dictTest[cle].affichage())
 
-
-#testCreationPattern2()
+testCreationPattern()
+testCreationPattern2()
