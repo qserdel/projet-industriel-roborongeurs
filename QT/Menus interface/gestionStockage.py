@@ -4,6 +4,7 @@
 #TODO créer le txt avec le bouton export
 #TODO gestion du placement des pots
 #TODO temps init à 05:00
+#TODO pleion ecran
 
 import os
 import time
@@ -45,9 +46,11 @@ class EssaiE1():
         self.placementPot1=placementPot1
 
     def start(self):
+        #TODO gérer ça
         print("rien")
 
     def stop(self):
+        #TODO gérer ça
         print("rien")
 
     def affichage(self):
