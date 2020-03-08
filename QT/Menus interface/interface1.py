@@ -458,7 +458,7 @@ class MenuPlacementPots():
         self.buttonValiderPlacementPots.clicked.connect(self.retourPlacementPots)
         #le selecteur d'essai
         self.selecteurEssai=interface.findChild(QtWidgets.QComboBox,'selecteurEssai')
-        self.selecteurEssai.currentIndexChanged.connect(self.selectionEssai)
+
         #les cadres de placement des pots
         self.placementPot1=interface.findChild(QtWidgets.QDoubleSpinBox,'boxPlacementPot1')
         self.placementPot1.valueChanged.connect(self.updatePlacement1)
@@ -484,23 +484,21 @@ class MenuPlacementPots():
         self.dictEssais=dict()
         print(interface.menuCreationPattern.checkModeEntrainement.isChecked())
         if(interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-            self.placementPot2.enabled(False)
-            self.sliderPot2.enabled(False)
+            #self.placementPot2.enabled(False)
+            #self.sliderPot2.enabled(False)
         for i in range(0,interface.menuCreationPattern.cadreNombreEssais.value()):
             nomEssai="T"+str(i)
             self.selecteurEssai.addItem(nomEssai)
             self.dictEssais[nomEssai+"E1"]=EssaiE1(self.placementPot1.value())
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
                 self.dictEssais[nomEssai+"E2"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
+        self.selecteurEssai.currentIndexChanged.connect(self.selectionEssai)
 
     def selectionEssai(self):
-        #TODO comprendre ce bordel
-        if(not self.dictEssais==None):
-            print(self.dictEssais[self.selecteurEssai.currentText()+"E1"].affichage())
-            #self.placement1.value()=self.dictEssais[self.selecteurEssai.currentText()+"E1"].placementPot1
+        if(not self.dictEssais['T0E1']==None):
+            self.placementPot1.setValue(self.dictEssais[self.selecteurEssai.currentText()+"E1"].placementPot1)
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-                print("hey")
-                #self.placement2.value()=self.dictEssais[self.selecteurEssai.currentText()+"E2"].placementPot2
+                self.placementPot2.setValue(self.dictEssais[self.selecteurEssai.currentText()+"E2"].placementPot2)
 
     def updatePlacement1(self):
         valeur=self.placementPot1.value()
