@@ -23,7 +23,7 @@ class Interface(QtWidgets.QMainWindow):
         #charge touts les patterns stockés en json
         self.dictPatterns=loadAllPatterns()
         #charge le fichier .ui de l'interface
-        uic.loadUi('mainwindow.ui', self)
+        uic.loadUi('interface.ui', self)
         #créé le selecteur de menu
         self.selector = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget')
         #créé tous les menus de l'interface
