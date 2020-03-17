@@ -37,7 +37,7 @@ class Souris():
 class EssaiE1():
     temps="00:00"
     placementPot1=0
-    issue=0
+    issue=-1
     isE2=False;
 
     def __init__(self,placementPot1):
@@ -52,7 +52,7 @@ class EssaiE1():
         print("rien")
 
     def affichage(self):
-        affichage=" ["+str(self.placementPot1)+"]"
+        affichage=" ["+str(self.placementPot1)+"]       "+self.issueToString()
         return affichage
 
     def toJson(self):
@@ -65,15 +65,15 @@ class EssaiE1():
         return essaiE1Json
 
     def issueToString(self):
-        if(self.issue==0): return "pas commencé"
+        if(self.issue==-1): return "pas commencé"
+        if(self.issue==0): return "temps écoulé"
         if(self.issue==1): return "   réussi   "
-        if(self.issue==2): return "temps écoulé"
 
 class EssaiE2():
     temps="00:00"
     placementPot1=0
     placementPot2=0
-    issue=0
+    issue=-1
     isE2=True;
 
     def __init__(self,placementPot1,placementPot2):
@@ -87,7 +87,7 @@ class EssaiE2():
         print("rien")
 
     def affichage(self):
-        affichage=" ["+str(self.placementPot1)+" "+str(self.placementPot2)+"]"
+        affichage=" ["+str(self.placementPot1)+" "+str(self.placementPot2)+"] "+self.issueToString()
         return affichage
 
     def toJson(self):
@@ -101,10 +101,10 @@ class EssaiE2():
         return essaiE2Json
 
     def issueToString(self):
-            if(self.issue==0): return "pas commencé"
+            if(self.issue==-1): return "pas commencé"
+            if(self.issue==0): return "temps écoulé"
             if(self.issue==1): return "   réussi   "
-            if(self.issue==2): return "temps écoulé"
-            if(self.issue==3): return "   échoué   "
+            if(self.issue==2): return "   échoué   "
 
 class Pattern():
 

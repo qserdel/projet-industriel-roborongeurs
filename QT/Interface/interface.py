@@ -11,10 +11,9 @@ ConfirmationSuppressionSerie = 5
 ConfirmationModificationPattern = 6
 ChoixSouris = 7
 ConfirmationSupressionSouris = 8
-ExperienceEssaiE1 = 9
-ExperienceEssaiE2 = 10
-ConfirmationArreterExperience = 11
-PlacementPots = 12
+ExperienceEssai = 9
+ConfirmationArreterExperience = 10
+PlacementPots = 11
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
@@ -36,8 +35,7 @@ class Interface(QtWidgets.QMainWindow):
         self.menuConfirmationModificationPattern = MenuConfirmationModificationPattern(self)
         self.menuChoixSouris = MenuChoixSouris(self)
         self.menuConfirmationSuppressionSouris = MenuConfirmationSuppressionSouris(self)
-        self.menuEssaiE1 = MenuEssaiE1(self)
-        self.menuEssaiE2 = MenuEssaiE2(self)
+        self.menuEssai = MenuEssai(self)
         self.menuConfirmationArreterExperience = MenuConfirmationArreterExperience(self)
         self.menuPlacementPots = MenuPlacementPots(self)
         #affiche le menu de base
@@ -315,7 +313,7 @@ class MenuChoixSouris():
         self.buttonChoisirSouris = interface.findChild(QtWidgets.QPushButton, 'supprimerSouris')
         self.buttonChoisirSouris.clicked.connect(self.accesSuppressionSouris)
         self.buttonSupprimerSouris = interface.findChild(QtWidgets.QPushButton, 'choisirSouris')
-        self.buttonSupprimerSouris.clicked.connect(self.accesEssaiE1)
+        self.buttonSupprimerSouris.clicked.connect(self.accesEssai)
         #nom du pattern courant
         self.nomPattern = interface.findChild(QtWidgets.QLabel, 'nomPatternChoixSouris')
         #affichage de la lsite des souris du pattern
@@ -324,11 +322,10 @@ class MenuChoixSouris():
         self.infoSouris = interface.findChild(QtWidgets.QLabel, 'infoSouris')
         self.listeSouris.currentIndexChanged.connect(self.affichageInfoSouris)
 #ici
-    def accesEssaiE1(self):
+    def accesEssai(self):
         print('lancement de l\'expérience')
-        interface.menuEssaiE1.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssaiE1.nomSouris.setText(interface.sourisActuelle.nom)
-        interface.selector.setCurrentIndex(ExperienceEssaiE1)
+        interface.menuEssai.updateAffichage()
+        interface.selector.setCurrentIndex(ExperienceEssai)
 
     def accesSuppressionSouris(self):
         print('acces au menu de confirmation de supression d\'une souris')
@@ -365,76 +362,74 @@ class MenuConfirmationSuppressionSouris():
         interface.selector.setCurrentIndex(ChoixSouris)
         interface.menuChoixSouris.affichageNomListe()
 
-#Le menu de suivi de l'experience, phase à 1 pot
-class MenuEssaiE1():
+#Le menu de suivi de l'experience
+class MenuEssai():
     def __init__(self,interface):
         self.interface=interface
         #boutons du menu
-        self.buttonTempsEcoule = interface.findChild(QtWidgets.QPushButton, 'tempsEcouleE1')
+        self.buttonTempsEcoule = interface.findChild(QtWidgets.QPushButton, 'tempsEcoule')
         self.buttonTempsEcoule.clicked.connect(self.tempsEcoule)
-        self.buttonReussite = interface.findChild(QtWidgets.QPushButton, 'reussiteE1')
+        self.buttonReussite = interface.findChild(QtWidgets.QPushButton, 'reussite')
         self.buttonReussite.clicked.connect(self.reussite)
-        #bouton utile uniquement à la mise en page
-        self.buttonEchec = interface.findChild(QtWidgets.QPushButton, 'echecE1')
-        self.buttonArretExperience = interface.findChild(QtWidgets.QPushButton, 'arreterExperienceE1')
-        self.buttonArretExperience.clicked.connect(self.arretExperience)
-        #nom du pattern actuel
-        self.nomPattern= interface.findChild(QtWidgets.QLabel, 'nomPatternEssaiE1')
-        #nom de la souris actuelle
-        self.nomSouris=interface.findChild(QtWidgets.QLabel, 'nomSourisEssaiE1')
-
-    def tempsEcoule(self):
-        print("chrono pas encore implémenté")
-
-    def reussite(self):
-        print("accès à l'essai suivant")
-        print("enregistrement des résultats et placement des pots pas encore implémenté")
-        interface.menuEssaiE2.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssaiE2.nomSouris.setText(interface.sourisActuelle.nom)
-        interface.selector.setCurrentIndex(ExperienceEssaiE2)
-
-    def arretExperience(self):
-        print("accès au menu de validation de l'arrêt de l'expérience")
-        interface.selector.setCurrentIndex(ConfirmationArreterExperience)
-
-#Le menu de suivi de l'experience, phase à 2 pots
-class MenuEssaiE2():
-    def __init__(self,interface):
-        self.interface=interface
-        #boutons du menu
-        self.buttonTempsEcoule = interface.findChild(QtWidgets.QPushButton, 'tempsEcouleE2')
-        self.buttonTempsEcoule.clicked.connect(self.tempsEcoule)
-        self.buttonReussite = interface.findChild(QtWidgets.QPushButton, 'reussiteE2')
-        self.buttonReussite.clicked.connect(self.reussite)
-        self.buttonEchec = interface.findChild(QtWidgets.QPushButton, 'echecE2')
+        self.buttonEchec = interface.findChild(QtWidgets.QPushButton, 'echec')
         self.buttonEchec.clicked.connect(self.echec)
-        self.buttonArretExperience = interface.findChild(QtWidgets.QPushButton, 'arreterExperienceE2')
+        self.buttonArretExperience = interface.findChild(QtWidgets.QPushButton, 'arreterExperience')
         self.buttonArretExperience.clicked.connect(self.arretExperience)
         #nom du pattern actuel
-        self.nomPattern= interface.findChild(QtWidgets.QLabel, 'nomPatternEssaiE2')
+        self.nomPattern= interface.findChild(QtWidgets.QLabel, 'nomPatternEssai')
         #nom de la souris actuelle
-        self.nomSouris=interface.findChild(QtWidgets.QLabel, 'nomSourisEssaiE2')
+        self.nomSouris=interface.findChild(QtWidgets.QLabel, 'nomSourisEssai')
+        #nom de l'essai en cours
+        self.nomEssai=interface.findChild(QtWidgets.QLabel, 'nomEssai')
+        #placement des pots
+        self.placementPot1=interface.findChild(QtWidgets.QLabel, 'placementPot1')
+        self.placementPot2=interface.findChild(QtWidgets.QLabel, 'placementPot2')
+        #label du pot2
+        self.labelPot2=interface.findChild(QtWidgets.QLabel, 'labelPot2')
 
     def tempsEcoule(self):
         print("chrono pas encore implémenté")
+        self.updateAffichage()
 
     def reussite(self):
         print("accès à l'essai suivant")
         print("enregistrement des résultats et placement des pots pas encore implémenté")
-        interface.menuEssaiE1.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssaiE1.nomSouris.setText(interface.sourisActuelle.nom)
-        interface.selector.setCurrentIndex(ExperienceEssaiE1)
+        interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
+        interface.menuEssai.nomSouris.setText(interface.sourisActuelle.nom)
+        self.updateAffichage()
 
     def echec(self):
         print("retour à l'essai précédent")
         print("enregistrement des résultats et placement des pots pas encore implémenté")
-        interface.menuEssaiE1.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssaiE1.nomSouris.setText(interface.sourisActuelle.nom)
-        interface.selector.setCurrentIndex(ExperienceEssaiE1)
+        interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
+        interface.menuEssai.nomSouris.setText(interface.sourisActuelle.nom)
+        self.updateAffichage()
 
     def arretExperience(self):
         print("accès au menu de validation de l'arrêt de l'expérience")
         interface.selector.setCurrentIndex(ConfirmationArreterExperience)
+
+    def updateAffichage(self):
+        self.nomPattern.setText(interface.patternActuel.nom)
+        self.nomSouris.setText(interface.sourisActuelle.nom)
+        for nomEssai in interface.sourisActuelle.dictEssais:
+            essai=interface.sourisActuelle.dictEssais[nomEssai]
+            if(essai.issue==-1):
+                Interface.essaiActuel=essai
+                self.nomEssai.setText(nomEssai)
+                break
+        self.placementPot1.setText(str(essai.placementPot1))
+        if(essai.isE2):
+            self.labelPot2.setEnabled(True)
+            self.placementPot2.setEnabled(True)
+            self.placementPot2.setText(str(essai.placementPot2))
+            self.buttonEchec.setEnabled(True)
+        else:
+            self.labelPot2.setEnabled(False)
+            self.placementPot2.setEnabled(False)
+            self.placementPot2.setText('X')
+            self.buttonEchec.setEnabled(False)
+
 
 #Le menu de confirmation de supression d'une souris dans un pattern
 class MenuConfirmationArreterExperience():
