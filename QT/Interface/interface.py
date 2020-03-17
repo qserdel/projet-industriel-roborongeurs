@@ -68,6 +68,7 @@ class MenuBase():
         interface.menuCreationPattern.clearAll()
         print('Accès au menu de création de pattern')
         interface.selector.setCurrentIndex(CreationPattern)
+        interface.menuCreationPattern.clearAll()
     def accesSelectionPattern(self):
         print('Accès au menu de séléction de pattern')
         interface.selector.setCurrentIndex(SelectionPattern)
@@ -117,7 +118,8 @@ class MenuCreationPattern():
             placementPots=[[0],[0]]
         else:
             placementPots=[[0,1],[0,1]]
-        pattern=Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
+        pattern=Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax)
+        pattern.placementPots(interface.menuPlacementPots.dictEssais)
         savePattern(pattern)
         print(pattern.affichage())
         interface.updatePatterns()
@@ -133,6 +135,7 @@ class MenuCreationPattern():
         self.checkModeEntrainement.setChecked(False)
         self.buttonValiderCreationPattern.setEnabled(False)
         self.buttonPlacementPots.setEnabled(False)
+        interface.menuPlacementPots.dictEssais=None
 
     def activerBoutonPlacementPots(self):
         if(self.cadreNombreEssais.value()!=0):
@@ -142,7 +145,7 @@ class MenuCreationPattern():
         self.activerBoutonValidationCreation()
 
     def activerBoutonValidationCreation(self):
-        if(self.cadreNom.toPlainText()!='' and self.cadreNombreSouris.value()!=0 and self.cadreNombreJours.value()!=0 and self.cadreNombreEssais.value()!=0 and self.cadreTempsMax.time().toString("hh:mm")!='00:00' and interface.menuPlacementPots.dictEssais!=null):
+        if(not self.cadreNom.toPlainText()=='' and not self.cadreNombreSouris.value()==0 and not self.cadreNombreJours.value()==0 and not self.cadreNombreEssais.value()==0 and not self.cadreTempsMax.time().toString("hh:mm")=='00:00' and not interface.menuPlacementPots.dictEssais==None):
             self.buttonValiderCreationPattern.setEnabled(True)
         else:
             self.buttonValiderCreationPattern.setEnabled(False)
@@ -484,8 +487,8 @@ class MenuPlacementPots():
         self.dictEssais=dict()
         print(interface.menuCreationPattern.checkModeEntrainement.isChecked())
         if(interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-            #self.placementPot2.enabled(False)
-            #self.sliderPot2.enabled(False)
+            self.placementPot2.setEnabled(False)
+            self.sliderPot2.setEnabled(False)
         for i in range(0,interface.menuCreationPattern.cadreNombreEssais.value()):
             nomEssai="T"+str(i)
             self.selecteurEssai.addItem(nomEssai)

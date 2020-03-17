@@ -19,11 +19,9 @@ class Souris():
         self.dictEssais[cle]=essais
 
     def affichage(self):
-        affichage="\n  nom: "+self.nom
-        affichage+="\n  dictEssais: {"
+        affichage="\n  souris "+self.nom+": "
         for cle in self.dictEssais:
-            affichage += "\n    "+cle+": "+self.dictEssais[cle].affichage()
-        affichage += "\n  }"
+            affichage += "\n    "+cle+":"+self.dictEssais[cle].affichage()
         return affichage
 
     def toJson(self):
@@ -54,7 +52,7 @@ class EssaiE1():
         print("rien")
 
     def affichage(self):
-        affichage="\n      placementPot1: "+str(self.placementPot1)
+        affichage=" ["+str(self.placementPot1)+"]"
         return affichage
 
     def toJson(self):
@@ -89,8 +87,7 @@ class EssaiE2():
         print("rien")
 
     def affichage(self):
-        affichage="\n      placementPot1: "+str(self.placementPot1)
-        affichage+="\n      placementPot2: "+str(self.placementPot2)
+        affichage=" ["+str(self.placementPot1)+" "+str(self.placementPot2)+"]"
         return affichage
 
     def toJson(self):
@@ -111,14 +108,13 @@ class EssaiE2():
 
 class Pattern():
 
-    def __init__(self,nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots):
+    def __init__(self,nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax):
         #tous les attributs "basiques" du pattern
         self.nom = nom
         self.nbSouris=nbSouris
         self.nbJours=nbJours
         self.nbEssais=nbEssais
         self.entrainement=entrainement
-        self.placementPots=placementPots
         #tempsMax sous la forme "MM:SS" passé en struct_time
         self.tempsMax=time.strptime(tempsMax,"%M:%S")
         #date actuelle
@@ -130,13 +126,18 @@ class Pattern():
         for i in range(0,nbSouris):
             self.ajouterSouris("s"+str(i))
             #pour chaque souris: création d'un dictionnaire [TjEk:essai] à partir de nbEssais, entrainement et le tableau placementsPots
-            for j in range(0,nbEssais):
-                self.dictSouris["s"+str(i)].ajouterEssai("T"+str(j)+"E1",EssaiE1(placementPots[j][0]))
-                if(not(entrainement)):
-                    self.dictSouris["s"+str(i)].ajouterEssai("T"+str(j)+"E2",EssaiE2(placementPots[j][0],placementPots[j][1]))
+            #for j in range(0,nbEssais):
+            #    self.dictSouris["s"+str(i)].ajouterEssai("T"+str(j)+"E1",EssaiE1(placementPots[j][0]))
+            #    if(not(entrainement)):
+            #        self.dictSouris["s"+str(i)].ajouterEssai("T"+str(j)+"E2",EssaiE2(placementPots[j][0],placementPots[j][1]))
 
     def ajouterSouris(self,nom):
         self.dictSouris[nom]=Souris(nom)
+
+    def placementPots(self,dictEssais):
+        for i in range(0,self.nbSouris):
+            #pour chaque souris: création d'un dictionnaire [TjEk:essai] à partir de nbEssais, entrainement et le tableau placementsPots
+            self.dictSouris["s"+str(i)].dictEssais=dictEssais
 
     def supprimerSouris(self,nom):
         del self.dictSouris[nom]
@@ -162,7 +163,7 @@ class Pattern():
         sourisDict=dict()
         for nomSouris in self.dictSouris:
             sourisDict[nomSouris]=self.dictSouris[nomSouris].toJson()
-        patternDict = {
+        patternJson = {
         "nom":self.nom,
         "nbSouris":self.nbSouris,
         "nbJours":self.nbJours,
@@ -170,36 +171,34 @@ class Pattern():
         "entrainement":self.entrainement,
         "tempsMax":time.strftime("%M:%S",self.tempsMax),
         "dateDebut":self.dateDebut,
-        "placementPots":self.placementPots,
         "sourisDict":sourisDict
         }
-        return patternDict
+        return patternJson
 
 #fonction de sauvegarde de pattern avec la bibliothèque pickle
 def savePattern(pattern):
-    patternDict=pattern.toJson()
+    patternJson=pattern.toJson()
     path="Resultats/json/"+pattern.nom+".json"
     with open(path,'w') as fichierPattern:
         #patternPickler=pickle.Pickler(fichierPattern)
-        json.dump(patternDict,fichierPattern)
-    #fichierPattern.close()
+        json.dump(patternJson,fichierPattern)
 
 #fonction de chargement de pattern
 def loadPattern(nomFichier):
     path="Resultats/json/"+nomFichier
     with open(path,'r') as fichierPattern:
-        patternDict = json.load(fichierPattern)
-    nom=patternDict["nom"]
-    nbSouris=patternDict["nbSouris"]
-    nbJours=patternDict["nbJours"]
-    nbEssais=patternDict["nbEssais"]
-    entrainement=patternDict["entrainement"]
-    tempsMax=patternDict["tempsMax"]
-    dateDebut=patternDict["dateDebut"]
-    placementPots=patternDict["placementPots"]
+        #créé le dictionnaire patternJson avec json.load()
+        patternJson = json.load(fichierPattern)
+    nom=patternJson["nom"]
+    nbSouris=patternJson["nbSouris"]
+    nbJours=patternJson["nbJours"]
+    nbEssais=patternJson["nbEssais"]
+    entrainement=patternJson["entrainement"]
+    tempsMax=patternJson["tempsMax"]
+    dateDebut=patternJson["dateDebut"]
     dictSouris=dict()
-    for nomSouris in patternDict["sourisDict"]:
-        souris=patternDict["sourisDict"][nomSouris]
+    for nomSouris in patternJson["sourisDict"]:
+        souris=patternJson["sourisDict"][nomSouris]
         dictEssais=dict()
         for nomEssai in souris["essaiDict"]:
             essai=souris["essaiDict"][nomEssai]
@@ -213,7 +212,7 @@ def loadPattern(nomFichier):
             dictEssais[nomEssai].issue=essai["issue"]
         dictSouris[nomSouris]=Souris(nomSouris)
         dictSouris[nomSouris].dictEssais=dictEssais
-    pattern = Pattern(nom,0,nbJours,nbEssais,entrainement,tempsMax,placementPots)
+    pattern = Pattern(nom,0,nbJours,nbEssais,entrainement,tempsMax)
     pattern.nbSouris=nbSouris
     pattern.dictSouris=dictSouris
     pattern.dateDebut=dateDebut
