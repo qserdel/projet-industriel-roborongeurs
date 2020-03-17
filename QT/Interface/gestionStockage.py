@@ -52,7 +52,7 @@ class EssaiE1():
         print("rien")
 
     def affichage(self):
-        affichage=" ["+str(self.placementPot1)+"]       "+self.issueToString()
+        affichage=" ["+str(self.placementPot1)+"]        "+self.issueToString()
         return affichage
 
     def toJson(self):
