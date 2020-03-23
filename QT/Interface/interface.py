@@ -109,7 +109,7 @@ class MenuCreationPattern():
         nbJours=self.cadreNombreJours.value()
         #nbEssais=self.cadreNombreEssais.value #à mettre quand j'aurais géré la création auto de tableau
         nbEssais=2
-        tempsMax=self.cadreTempsMax.time().toString("hh:mm") #l'affichage donne hh:mm mais on s'en sert comme mm:ss
+        tempsMax=self.cadreTempsMax.time().toString("mm:ss") #l'affichage en mm:ss
         entrainement=self.checkModeEntrainement.isChecked()
         #ajouter la gestion du tableau de placement
         if(entrainement):
@@ -143,7 +143,7 @@ class MenuCreationPattern():
         self.activerBoutonValidationCreation()
 
     def activerBoutonValidationCreation(self):
-        if(not self.cadreNom.toPlainText()=='' and not self.cadreNombreSouris.value()==0 and not self.cadreNombreJours.value()==0 and not self.cadreNombreEssais.value()==0 and not self.cadreTempsMax.time().toString("hh:mm")=='00:00' and not interface.menuPlacementPots.dictEssais==None):
+        if(not self.cadreNom.toPlainText()=='' and not self.cadreNombreSouris.value()==0 and not self.cadreNombreJours.value()==0 and not self.cadreNombreEssais.value()==0 and not self.cadreTempsMax.time().toString("mm:ss")=='00:00' and not interface.menuPlacementPots.dictEssais==None):
             self.buttonValiderCreationPattern.setEnabled(True)
         else:
             self.buttonValiderCreationPattern.setEnabled(False)
@@ -180,6 +180,7 @@ class MenuSelectionPattern():
     def accesSuppressionPattern(self):
         print('Acces au menu de supression de pattern/série')
         interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
+        interface.menuConfirmationSuppressionSerie.nomSerie.setText(interface.patternActuel.nom)
 
     def afficherListePattern(self,interface):
         self.listePatterns.clear()
@@ -215,9 +216,10 @@ class MenuResultats():
     def accesSuppressionSerie(self):
         print('Accès au menu de supression d\'une série/pattern')
         interface.selector.setCurrentIndex(ConfirmationSuppressionSerie)
+        interface.menuConfirmationSuppressionSerie.nomSerie.setText(interface.patternActuel.nom)
 
     def export(self):
-        transcriptionTxt(interface.patternActuel)
+        transcriptionCsv(interface.patternActuel)
         print("l'export USB n'est pas encore implémenté")
         #TODO implémenter la détection USB (et ça va être long...)
 
@@ -325,7 +327,7 @@ class MenuConfirmationSuppressionSouris():
         self.buttonAnnulerSupressionSouris.clicked.connect(self.retourChoixSouris)
 
     def supprimerSouris(self):
-        print("supression de souris pas encore implémentée")
+        interface.patternActuel.dictSouris.pop(interface.sourisActuelle.nom,None)
         self.retourChoixSouris()
 
     def retourChoixSouris(self):
@@ -357,6 +359,9 @@ class MenuEssai():
         self.placementPot2=interface.findChild(QtWidgets.QLabel, 'placementPot2')
         #label du pot2
         self.labelPot2=interface.findChild(QtWidgets.QLabel, 'labelPot2')
+        #buton de marche/arret du chrono
+        self.buttonStartStop=interface.findChild(QtWidgets.QPushButton, 'startStopChrono')
+        self.buttonStartStop.clicked.connect(self.startStopChrono)
 
     def tempsEcoule(self):
         print("chrono pas encore implémenté")
@@ -368,7 +373,6 @@ class MenuEssai():
 
     def reussite(self):
         print("accès à l'essai suivant")
-        print("enregistrement des résultats et placement des pots pas encore implémenté")
         interface.essaiActuel.issue=1
         savePattern(interface.patternActuel)
         interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
@@ -377,7 +381,6 @@ class MenuEssai():
 
     def echec(self):
         print("retour à l'essai précédent")
-        print("enregistrement des résultats et placement des pots pas encore implémenté")
         interface.essaiActuel.issue=2
         savePattern(interface.patternActuel)
         interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
@@ -389,6 +392,7 @@ class MenuEssai():
         interface.selector.setCurrentIndex(ConfirmationArreterExperience)
 
     def updateAffichage(self):
+        #self.time=
         self.nomPattern.setText(interface.patternActuel.nom)
         self.nomSouris.setText(interface.sourisActuelle.nom)
         for nomEssai in interface.sourisActuelle.dictEssais:
@@ -412,6 +416,11 @@ class MenuEssai():
                 self.placementPot2.setText('X')
                 self.buttonEchec.setEnabled(False)
 
+    def startStopChrono(self):
+        if(self.buttonStartStop.isChecked()):
+            print("start")
+        else:
+            print("stop")
 
 #Le menu de confirmation de supression d'une souris dans un pattern
 class MenuConfirmationArreterExperience():
@@ -497,7 +506,6 @@ class MenuPlacementPots():
 
     def updatePlacement2(self):
         valeur=self.placementPot2.value()
-        #TODO changer la valeur dans l'objet pattern
         if(valeur==0.5):
             valeur=1
         if(valeur==-0.5):

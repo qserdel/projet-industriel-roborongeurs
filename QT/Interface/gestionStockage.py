@@ -1,14 +1,9 @@
-#TODO afficher les patterns dans les Resultats
-#TODO resize l'affichage dans selection pattern
-#TODO supression de patterns/resultats
-#TODO créer le txt avec le bouton export
-#TODO gestion du placement des pots
-#TODO temps init à 05:00
-#TODO pleion ecran
+#TODO plein ecran
 
 import os
 import time
 import json
+import csv
 
 class Souris():
 
@@ -224,41 +219,27 @@ def loadAllPatterns():
     path="Resultats/json"
     dictPatterns=dict()
     listeFichiersPatterns=os.listdir(path)
-    print(listeFichiersPatterns)
     for nomPattern in listeFichiersPatterns:
-        print(nomPattern)
         dictPatterns[nomPattern]=loadPattern(nomPattern)
     return dictPatterns
 
-def transcriptionTxt(pattern):
-    path="Resultats/txt/"+pattern.nom+".txt"
-    fichierTxt=open(path,'w')
-    texte="Pattern: "+pattern.nom
-    texte+="\n________________________________________"
-    texte+="\nnombre de souris: "+str(pattern.nbSouris)
-    texte+="\nnombre de jours: "+str(pattern.nbJours)
-    texte+="\nnombre d'essais par experience: "+str(pattern.nbJours)
-    if(pattern.entrainement):
-        texte+="\nmode: entrainement"
-    if(not(pattern.entrainement)):
-        texte+="\nmode: expérimentation"
-    texte+="\ntemps maximum: "+time.strftime("%M:%S",pattern.tempsMax)
-    texte+="\ndate de début: "+pattern.dateDebut
-    texte+="\n________________________________________"
-    for nomSouris in pattern.dictSouris:
-        texte+="\n souris "+nomSouris+" :\n"
-        for nomEssai in pattern.dictSouris[nomSouris].dictEssais:
-            essai = pattern.dictSouris[nomSouris].dictEssais[nomEssai]
-            texte+="\n    | essai "+nomEssai+"| "
-            texte+="issue: "+essai.issueToString()+"| "
-            texte+="temps: "+essai.temps+"| "
-            texte+="pot1: "+str(essai.placementPot1)+"| "
-            if(essai.isE2):
-                texte+="pot2: "+str(essai.placementPot2)+"| "
-            texte+="\n    ___________________________________________________"
-        texte+="\n"
-    fichierTxt.write(texte)
-    fichierTxt.close()
+#Création des fichiers csv pour l'export de résultats
+def transcriptionCsv(pattern):
+    path="Resultats/csv/"+pattern.nom+".csv"
+    with open(path, mode='w') as fichierCsv:
+        CsvWriter = csv.writer(fichierCsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        CsvWriter.writerow(['Pattern','Jours','Temps max','Souris','Essai','Distance','Issue','Temps'])
+        CsvWriter.writerow([pattern.nom,pattern.nbJours,time.strftime("%M:%S",pattern.tempsMax)])
+        for nomSouris in pattern.dictSouris:
+            souris=pattern.dictSouris[nomSouris]
+            CsvWriter.writerow([' ',' ',' ',nomSouris])
+            for nomEssai in souris.dictEssais:
+                essai=souris.dictEssais[nomEssai]
+                if(essai.isE2):
+                    distance=abs(essai.placementPot1-essai.placementPot2)
+                    CsvWriter.writerow([' ',' ',' ',' ',nomEssai,distance,essai.issue,essai.temps])
+                else:
+                    CsvWriter.writerow([' ',' ',' ',' ',nomEssai,0,essai.issue,essai.temps])
 
 def testCreationPattern():
     nom="patternTest"
