@@ -439,7 +439,7 @@
       <property name="font">
        <font>
         <family>Century Schoolbook L</family>
-        <pointsize>17</pointsize>
+        <pointsize>16</pointsize>
         <weight>75</weight>
         <bold>true</bold>
         <stylestrategy>PreferDefault</stylestrategy>
@@ -447,7 +447,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QGridLayout" name="gridLayout_14">
@@ -575,7 +575,7 @@
           <property name="font">
            <font>
             <family>Century Schoolbook L</family>
-            <pointsize>16</pointsize>
+            <pointsize>15</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -666,7 +666,7 @@
           <property name="font">
            <font>
             <family>Century Schoolbook L</family>
-            <pointsize>16</pointsize>
+            <pointsize>15</pointsize>
             <weight>75</weight>
             <bold>true</bold>
            </font>
@@ -733,7 +733,7 @@
           <property name="font">
            <font>
             <family>Century Schoolbook L</family>
-            <pointsize>16</pointsize>
+            <pointsize>15</pointsize>
             <weight>75</weight>
             <italic>false</italic>
             <bold>true</bold>
