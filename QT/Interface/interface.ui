@@ -6,16 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>746</width>
+    <width>754</width>
     <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="imageRoborongeurs.qrc">
+    <normaloff>:/logo Roborongeurs/logo Roborongeurs.png</normaloff>:/logo Roborongeurs/logo Roborongeurs.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="2">
+    <item row="0" column="0">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="palette">
        <palette>
@@ -435,13 +439,15 @@
       <property name="font">
        <font>
         <family>Century Schoolbook L</family>
-        <pointsize>18</pointsize>
+        <pointsize>17</pointsize>
         <weight>75</weight>
         <bold>true</bold>
+        <stylestrategy>PreferDefault</stylestrategy>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="currentIndex">
-       <number>9</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="Menu_base">
        <layout class="QGridLayout" name="gridLayout_14">
@@ -3618,25 +3624,6 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="0" colspan="6">
-         <widget class="QLabel" name="label_6">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Création de pattern</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="2" colspan="4">
          <widget class="QPlainTextEdit" name="cadreNomPattern">
           <property name="sizePolicy">
@@ -4160,6 +4147,32 @@
           </property>
           <property name="text">
            <string>Valider</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="4">
+         <widget class="QLabel" name="label_6">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Création de pattern</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4" colspan="2">
+         <widget class="QPushButton" name="copierPattern">
+          <property name="text">
+           <string>Copier Pattern</string>
           </property>
          </widget>
         </item>
@@ -8420,7 +8433,57 @@ et le pattern correspondant?</string>
       </widget>
       <widget class="QWidget" name="page_4">
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="6" column="3">
+        <item row="4" column="2" colspan="3">
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>574</width>
+             <height>197</height>
+            </rect>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::WheelFocus</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QLabel" name="infoSouris">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item row="7" column="3">
          <spacer name="horizontalSpacer_8">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -8436,7 +8499,7 @@ et le pattern correspondant?</string>
           </property>
          </spacer>
         </item>
-        <item row="4" column="2" colspan="3">
+        <item row="5" column="2" colspan="3">
          <widget class="QPushButton" name="choisirSouris">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -8882,23 +8945,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2" colspan="3">
-         <widget class="QLabel" name="infoSouris">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="5">
+        <item row="4" column="5">
          <spacer name="horizontalSpacer_23">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -8914,7 +8961,7 @@ et le pattern correspondant?</string>
           </property>
          </spacer>
         </item>
-        <item row="3" column="6">
+        <item row="4" column="6">
          <spacer name="horizontalSpacer_10">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -8937,7 +8984,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <spacer name="horizontalSpacer_22">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -8953,7 +9000,7 @@ et le pattern correspondant?</string>
           </property>
          </spacer>
         </item>
-        <item row="3" column="0">
+        <item row="4" column="0">
          <spacer name="horizontalSpacer_13">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -8995,7 +9042,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="1" colspan="2">
+        <item row="7" column="1" colspan="2">
          <widget class="QPushButton" name="supprimerSouris">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -9429,7 +9476,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="6" column="4" colspan="2">
+        <item row="7" column="4" colspan="2">
          <widget class="QPushButton" name="retourMenuChoixSouris">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -9448,7 +9495,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="7">
+        <item row="6" column="0" colspan="7">
          <widget class="Line" name="line">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -12245,7 +12292,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="13" column="1" colspan="3">
+        <item row="15" column="1" colspan="3">
          <widget class="QPushButton" name="validerPlacementPots">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -12265,7 +12312,7 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
-        <item row="12" column="2">
+        <item row="14" column="2">
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -12281,7 +12328,7 @@ et le pattern correspondant?</string>
           </property>
          </spacer>
         </item>
-        <item row="11" column="0" colspan="5">
+        <item row="13" column="0" colspan="5">
          <widget class="Line" name="line_10">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -12431,6 +12478,20 @@ et le pattern correspondant?</string>
           </property>
          </widget>
         </item>
+        <item row="11" column="1" colspan="3">
+         <widget class="Line" name="line_22">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="1" colspan="3">
+         <widget class="QPushButton" name="placementSuivant">
+          <property name="text">
+           <string>Suivant</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="page">
@@ -12511,6 +12572,57 @@ et le pattern correspondant?</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page_6">
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>320</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>330</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>180</y>
+          <width>67</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+       <widget class="QPlainTextEdit" name="plainTextEdit">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>170</y>
+          <width>104</width>
+          <height>70</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -12520,7 +12632,7 @@ et le pattern correspondant?</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>746</width>
+     <width>754</width>
      <height>22</height>
     </rect>
    </property>

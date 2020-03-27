@@ -1,6 +1,16 @@
 import sys
 from PyQt5 import QtWidgets, uic
 from gestionStockage import *
+
+#TODO implémenter le chrono
+#TODO ajouter la possibilité de dupliquer les parametres d'un pattern
+#TODO retour en arrière en cas d'echec
+#TODO régler les bugs de placement des pots (position initiale des sliders)
+#TODO ajouter un bouton "suivant" dans le placement de pots
+#TODO gérer la mise en forme sur la tablette
+#TODO passer l'affichage des souris en menu déroulant
+
+
 #variables globales pour faciliter la navigation entre les menus
 Base = 0
 CreationPattern = 1
@@ -14,6 +24,7 @@ ExperienceEssai = 8
 ConfirmationArreterExperience = 9
 PlacementPots = 10
 FinExperience = 11
+CopiePattern = 13
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
