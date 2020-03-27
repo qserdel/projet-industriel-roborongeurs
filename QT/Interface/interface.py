@@ -8,7 +8,11 @@ from gestionStockage import *
 #TODO régler les bugs de placement des pots (position initiale des sliders)
 #TODO ajouter un bouton "suivant" dans le placement de pots
 #TODO gérer la mise en forme sur la tablette
-#TODO passer l'affichage des souris en menu déroulant
+#TODO regler le problème de l'odonancement des listes à plus de 10 essais
+#TODO afficher le pourcentage d'avancement du pattern
+#TODO créer raccourci bureau
+#TODO lancer directement au boot
+#TODO affuchage plein écran automatique
 
 
 #variables globales pour faciliter la navigation entre les menus

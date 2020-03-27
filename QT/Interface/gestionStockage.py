@@ -216,7 +216,7 @@ def loadPattern(nomFichier):
 #chercher tous les fichiers présents dans le dossier Resultats/json
 #et créé un dictionnaire de patterns correspondant
 def loadAllPatterns():
-    path="Resultats/json"
+    path="./Resultats/json"
     dictPatterns=dict()
     listeFichiersPatterns=os.listdir(path)
     for nomPattern in listeFichiersPatterns:
