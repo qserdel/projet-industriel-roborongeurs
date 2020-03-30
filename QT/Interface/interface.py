@@ -5,10 +5,7 @@ from chronoThread import chronoThread
 
 #sur PC
 
-#TODO +++ retour en arrière en cas d'echec
 #TODO régler les bugs de placement des pots (position initiale des sliders)
-#TODO - ajouter un bouton "suivant" dans le placement de pots
-#TODO -- afficher le pourcentage d'avancement du pattern
 
 #Sur raspberry
 
@@ -24,14 +21,13 @@ CreationPattern = 1
 SelectionPattern = 2
 Resultats = 3
 ConfirmationSuppressionSerie = 4
-ConfirmationModificationPattern = 5
-ChoixSouris = 6
-ConfirmationSupressionSouris = 7
-ExperienceEssai = 8
-ConfirmationArreterExperience = 9
-PlacementPots = 10
-FinExperience = 11
-CopiePattern = 12
+ChoixSouris = 5
+ConfirmationSupressionSouris = 6
+ExperienceEssai = 7
+ConfirmationArreterExperience = 8
+PlacementPots = 9
+FinExperience = 10
+CopiePattern = 11
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
@@ -49,7 +45,6 @@ class Interface(QtWidgets.QMainWindow):
         self.menuSelectionPattern = MenuSelectionPattern(self)
         self.menuResultats = MenuResultats(self)
         self.menuConfirmationSuppressionSerie = MenuConfirmationSuppressionSerie(self)
-        self.menuConfirmationModificationPattern = MenuConfirmationModificationPattern(self)
         self.menuChoixSouris = MenuChoixSouris(self)
         self.menuConfirmationSuppressionSouris = MenuConfirmationSuppressionSouris(self)
         self.menuEssai = MenuEssai(self)
@@ -133,6 +128,7 @@ class MenuCreationPattern():
         pattern=Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax)
         pattern.placementPots(interface.menuPlacementPots.dictEssais)
         savePattern(pattern)
+        print("nouveau pattern créé:")
         print(pattern.affichage())
         interface.updatePatterns()
         interface.retourMenu()
@@ -276,24 +272,6 @@ class MenuConfirmationSuppressionSerie():
         print('retour au menu des résultats')
         interface.selector.setCurrentIndex(Base)
 
-#Le menu de confirmation des modifications sur un pattern existant
-class MenuConfirmationModificationPattern():
-    def __init__(self,interface):
-        self.interface=interface
-        #boutons du menu
-        self.buttonSupprimer = interface.findChild(QtWidgets.QPushButton, 'validerModificationPattern')
-        self.buttonSupprimer.clicked.connect(self.modifier)
-        self.buttonAnnuler = interface.findChild(QtWidgets.QPushButton, 'annulerModificationPattern')
-        self.buttonAnnuler.clicked.connect(self.annuler)
-
-    def modifier(self):
-        print('modification d\'un pattern')
-        interface.selector.setCurrentIndex(CreationPattern)
-
-    def annuler(self):
-        print('retour au menu de sélection pattern')
-        interface.selector.setCurrentIndex(SelectionPattern)
-
 #Le menu du choix de la souris à exploiter
 class MenuChoixSouris():
     def __init__(self,interface):
@@ -393,7 +371,7 @@ class MenuEssai():
         if(self.chronoRunning):
             self.buttonStartStop.setChecked(False)
             self.startStopChrono()
-        for nomEssai in interface.sourisActuelle.dictEssais:
+        for nomEssai in sorted(interface.sourisActuelle.dictEssais):
             essai=interface.sourisActuelle.dictEssais[nomEssai]
             if(essai.issue==-1):
                 Interface.essaiActuel=essai
@@ -433,42 +411,52 @@ class MenuEssai():
             print("stop")
             self.chronoRunning=False
             self.chronoThread.join()
-            interface.essaiActuel.temps=self.affichageChrono.text()
 
     def tempsEcoule(self):
         print("Temps écoulé, retour à l'essai E1 précédent")
         interface.essaiActuel.issue=0
+        #la souris doit recommencer à l'essai E1 précédent, on créé une copie de cet essai
         nomNouvelEssaiE1=list(self.nomEssai.text())
         nomNouvelEssaiE1[4]='1'
+        nomNouvelEssaiE1="".join(nomNouvelEssaiE1[0:5])
+        print(nomNouvelEssaiE1)
         i=1
-        nomNouvelEssaiE1[6]=str(i)
-        while("".join(nomNouvelEssaiE1) in interface.sourisActuelle.dictEssais):
+        #on s'assure de créer un essai qui n'existe pas dans la liste
+        nomNouvelEssaiE1courant=nomNouvelEssaiE1+"("+str(i)+")"
+        while(nomNouvelEssaiE1courant in interface.sourisActuelle.dictEssais):
             i+=1
-            nomNouvelEssaiE1[6]=str(i)
-        nomNouvelEssaiE1="".join(nomNouvelEssaiE1)
+            nomNouvelEssaiE1courant=nomNouvelEssaiE1+"("+str(i)+")"
+        nomNouvelEssaiE1=nomNouvelEssaiE1courant
         interface.sourisActuelle.dictEssais[nomNouvelEssaiE1]=EssaiE1(interface.essaiActuel.placementPot1)
+        #si l'essai raté est de type E2, on créé aussi une copie de l'essai E2
         if(interface.essaiActuel.isE2):
             nomNouvelEssaiE2=list(self.nomEssai.text())
             nomNouvelEssaiE2[4]='2'
+            nomNouvelEssaiE2="".join(nomNouvelEssaiE2[0:5])
+            print(nomNouvelEssaiE2)
             i=1
-            nomNouvelEssaiE2[6]=str(i)
-            while("".join(nomNouvelEssaiE2) in interface.sourisActuelle.dictEssais):
+            #on s'assure de créer un essai qui n'existe pas dans la liste
+            nomNouvelEssaiE2courant=nomNouvelEssaiE2+"("+str(i)+")"
+            while(nomNouvelEssaiE2courant in interface.sourisActuelle.dictEssais):
                 i+=1
-                nomNouvelEssaiE2[6]=str(i)
-        nomNouvelEssaiE2="".join(nomNouvelEssaiE2)
-        interface.sourisActuelle.dictEssais[nomNouvelEssaiE2]=EssaiE2(interface.essaiActuel.placementPot1,interface.essaiActuel.placementPot1)
+                nomNouvelEssaiE2courant=nomNouvelEssaiE2+"("+str(i)+")"
+            nomNouvelEssaiE2=nomNouvelEssaiE2courant
+            interface.sourisActuelle.dictEssais[nomNouvelEssaiE2]=EssaiE2(interface.essaiActuel.placementPot1,interface.essaiActuel.placementPot1)
+        interface.essaiActuel.temps=self.affichageChrono.text()
         savePattern(interface.patternActuel)
         self.updateAffichage()
 
     def reussite(self):
         print("Réussite, accès à l'essai suivant")
         interface.essaiActuel.issue=1
+        interface.essaiActuel.temps=self.affichageChrono.text()
         savePattern(interface.patternActuel)
         self.updateAffichage()
 
     def echec(self):
         print("Echec, accès à l'essai précédent")
         interface.essaiActuel.issue=2
+        interface.essaiActuel.temps=self.affichageChrono.text()
         savePattern(interface.patternActuel)
         self.updateAffichage()
 
@@ -499,14 +487,14 @@ class MenuPlacementPots():
         #boutons du menu
         self.buttonValiderPlacementPots=interface.findChild(QtWidgets.QPushButton,'validerPlacementPots')
         self.buttonValiderPlacementPots.clicked.connect(self.retourPlacementPots)
+        self.buttonEssaiSuivant=interface.findChild(QtWidgets.QPushButton, 'essaiSuivant')
+        self.buttonEssaiSuivant.clicked.connect(self.essaiSuivant)
         #le selecteur d'essai
         self.selecteurEssai=interface.findChild(QtWidgets.QComboBox,'selecteurEssai')
 
         #les cadres de placement des pots
         self.placementPot1=interface.findChild(QtWidgets.QDoubleSpinBox,'boxPlacementPot1')
-        self.placementPot1.valueChanged.connect(self.updatePlacement1)
         self.placementPot2=interface.findChild(QtWidgets.QDoubleSpinBox,'boxPlacementPot2')
-        self.placementPot2.valueChanged.connect(self.updatePlacement2)
         #les sliders giga-stylés d'aide au placement
         self.sliderPot1=interface.findChild(QtWidgets.QSlider,'sliderPlacementPot1')
         self.sliderPot1.valueChanged.connect(self.updateSlider1)
@@ -517,40 +505,46 @@ class MenuPlacementPots():
     def retourPlacementPots(self):
         print("retour au menu de création de pattern")
         interface.selector.setCurrentIndex(CreationPattern)
+        self.selecteurEssai.currentIndexChanged.disconnect()
         interface.menuCreationPattern.activerBoutonValidationCreation()
 
     def creationListeEssai(self):
         self.selecteurEssai.clear()
         self.dictEssais=dict()
-        print(interface.menuCreationPattern.checkModeEntrainement.isChecked())
         if(interface.menuCreationPattern.checkModeEntrainement.isChecked()):
             self.placementPot2.setEnabled(False)
             self.sliderPot2.setEnabled(False)
         for i in range(0,interface.menuCreationPattern.cadreNombreEssais.value()):
             nomEssai="T"+str(i).zfill(2)
             self.selecteurEssai.addItem(nomEssai)
-            self.dictEssais[nomEssai+"E1,0"]=EssaiE1(self.placementPot1.value())
+            self.dictEssais[nomEssai+"E1"]=EssaiE1(0)
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-                self.dictEssais[nomEssai+"E2,0"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
+                self.dictEssais[nomEssai+"E2"]=EssaiE2(0,0)
         self.selecteurEssai.currentIndexChanged.connect(self.selectionEssai)
+        self.selectionEssai()
 
     def selectionEssai(self):
-        if(not self.dictEssais['T00E1,0']==None):
+        if('T00E1' in self.dictEssais):
             self.placementPot1.setValue(self.dictEssais[self.selecteurEssai.currentText()+"E1"].placementPot1)
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
+                print(self.dictEssais[self.selecteurEssai.currentText()+"E2"].placementPot2)
                 self.placementPot2.setValue(self.dictEssais[self.selecteurEssai.currentText()+"E2"].placementPot2)
+        #blocage du bouton "essai suivant" si on est au dernier essai de la liste
+        if(self.selecteurEssai.currentIndex() ==self.selecteurEssai.count()-1):
+            self.buttonEssaiSuivant.setEnabled(False)
+        else:
+            self.buttonEssaiSuivant.setEnabled(True)
+        self.updatePlacement1()
+        self.updatePlacement2()
+        self.updateSlider1()
+        self.updateSlider2()
 
     def updatePlacement1(self):
         valeur=self.placementPot1.value()
-        #TODO changer la valeur dans l'objet pattern
-        if(valeur==0.5):
-            valeur=1
-        if(valeur==-0.5):
-            valeur=-1
         self.sliderPot1.setValue(valeur*2)
-        self.dictEssais[self.selecteurEssai.currentText()+"E1,0"]=EssaiE1(self.placementPot1.value())
+        self.dictEssais[self.selecteurEssai.currentText()+"E1"].placementPot1=self.placementPot1.value()
         if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-            self.dictEssais[self.selecteurEssai.currentText()+"E2,0"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
+            self.dictEssais[self.selecteurEssai.currentText()+"E2"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
 
     def updateSlider1(self):
         valeur=self.sliderPot1.value()/2
@@ -563,12 +557,8 @@ class MenuPlacementPots():
 
     def updatePlacement2(self):
         valeur=self.placementPot2.value()
-        if(valeur==0.5):
-            valeur=1
-        if(valeur==-0.5):
-            valeur=-1
         self.sliderPot2.setValue(valeur*2)
-        self.dictEssais[self.selecteurEssai.currentText()+"E"+str(2)]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
+        self.dictEssais[self.selecteurEssai.currentText()+"E2"].placementPot2=self.placementPot2.value()
 
     def updateSlider2(self):
         valeur=self.sliderPot2.value()/2
@@ -578,6 +568,12 @@ class MenuPlacementPots():
             valeur=-1
         self.placementPot2.setValue(valeur)
         self.updatePlacement2()
+
+    def essaiSuivant(self):
+        self.updateSlider1()
+        self.updateSlider2()
+        self.selecteurEssai.setCurrentIndex(self.selecteurEssai.currentIndex() +1)
+
 
 #menu ouvert lorsqu'une souris a fini sa série d'essais
 class menuFinExperience():

@@ -15,9 +15,9 @@ class Souris():
         self.dictEssais[cle]=essais
 
     def affichage(self):
-        affichage="\n  souris "+self.nom+": "
+        affichage="\n  souris "+self.nom+" : "
         for cle in self.dictEssais:
-            affichage += "\n    "+cle+":"+self.dictEssais[cle].affichage()
+            affichage += "\n    "+cle+" :"+self.dictEssais[cle].affichage()
         return affichage
 
     def toJson(self):
@@ -55,7 +55,7 @@ class EssaiE1():
     def issueToString(self):
         if(self.issue==-1): return "pas commencé"
         if(self.issue==0): return "temps écoulé"
-        if(self.issue==1): return "   réussi   "
+        if(self.issue==1): return "réussi"
 
 class EssaiE2():
     temps="00:00"
@@ -85,8 +85,8 @@ class EssaiE2():
     def issueToString(self):
             if(self.issue==-1): return "pas commencé"
             if(self.issue==0): return "temps écoulé"
-            if(self.issue==1): return "   réussi   "
-            if(self.issue==2): return "   échoué   "
+            if(self.issue==1): return "réussi"
+            if(self.issue==2): return "échoué"
 
 class Pattern():
 
@@ -152,6 +152,9 @@ class Pattern():
 
 #fonction de sauvegarde de pattern avec la bibliothèque pickle
 def savePattern(pattern):
+    #on trie tous les essais par ordre alphabetique
+    #for nomSouris in pattern.dictSouris:
+    #    pattern.dictSouris[nomSouris].dictEssais = sorted(pattern.dictSouris[nomSouris].dictEssais)
     patternJson=pattern.toJson()
     path="Resultats/json/"+pattern.nom+".json"
     with open(path,'w') as fichierPattern:
@@ -212,7 +215,7 @@ def transcriptionCsv(pattern):
         for nomSouris in pattern.dictSouris:
             souris=pattern.dictSouris[nomSouris]
             CsvWriter.writerow([' ',' ',' ',nomSouris])
-            for nomEssai in souris.dictEssais:
+            for nomEssai in sorted(souris.dictEssais):
                 essai=souris.dictEssais[nomEssai]
                 if(essai.isE2):
                     distance=abs(essai.placementPot1-essai.placementPot2)
