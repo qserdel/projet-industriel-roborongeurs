@@ -3,10 +3,6 @@ from PyQt5 import QtWidgets, uic
 from gestionStockage import *
 from chronoThread import chronoThread
 
-#sur PC
-
-#TODO régler les bugs de placement des pots (position initiale des sliders)
-
 #Sur raspberry
 
 #TODO +++ implémenter la détection USB
