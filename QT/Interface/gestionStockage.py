@@ -10,6 +10,7 @@ class Souris():
     def __init__(self,nom):
         self.nom = nom
         self.dictEssais = dict()
+
     def ajouterEssai(self,cle,essais):
         self.dictEssais[cle]=essais
 
@@ -38,16 +39,8 @@ class EssaiE1():
     def __init__(self,placementPot1):
         self.placementPot1=placementPot1
 
-    def start(self):
-        #TODO gérer ça
-        print("rien")
-
-    def stop(self):
-        #TODO gérer ça
-        print("rien")
-
     def affichage(self):
-        affichage=" ["+str(self.placementPot1)+"]        "+self.issueToString()
+        affichage="\t["+str(self.placementPot1)+"]\t"+self.issueToString()
         return affichage
 
     def toJson(self):
@@ -75,14 +68,8 @@ class EssaiE2():
         self.placementPot1=placementPot1
         self.placementPot2=placementPot2
 
-    def start(self):
-        print("rien")
-
-    def stop(self):
-        print("rien")
-
     def affichage(self):
-        affichage=" ["+str(self.placementPot1)+" "+str(self.placementPot2)+"] "+self.issueToString()
+        affichage="\t["+str(self.placementPot1)+" "+str(self.placementPot2)+"]\t"+self.issueToString()
         return affichage
 
     def toJson(self):
@@ -112,19 +99,12 @@ class Pattern():
         self.entrainement=entrainement
         #tempsMax sous la forme "MM:SS" passé en struct_time
         self.tempsMax=time.strptime(tempsMax,"%M:%S")
-        #date actuelle
-        date = time.localtime()
-        #passée au format dd/mm/yyyy
-        self.dateDebut=time.strftime("%d/%m/%Y", date)
+        #date actuelle passée au format dd/mm/yyyy
+        self.dateDebut=time.strftime("%d/%m/%Y", time.localtime())
         #création d'un dictionnaire [si:Souris] à partir de nbSouris
         self.dictSouris=dict()
         for i in range(0,nbSouris):
             self.ajouterSouris("s"+str(i))
-            #pour chaque souris: création d'un dictionnaire [TjEk:essai] à partir de nbEssais, entrainement et le tableau placementsPots
-            #for j in range(0,nbEssais):
-            #    self.dictSouris["s"+str(i)].ajouterEssai("T"+str(j)+"E1",EssaiE1(placementPots[j][0]))
-            #    if(not(entrainement)):
-            #        self.dictSouris["s"+str(i)].ajouterEssai("T"+str(j)+"E2",EssaiE2(placementPots[j][0],placementPots[j][1]))
 
     def ajouterSouris(self,nom):
         self.dictSouris[nom]=Souris(nom)
@@ -133,6 +113,10 @@ class Pattern():
         for i in range(0,self.nbSouris):
             #pour chaque souris: création d'un dictionnaire [TjEk:essai] à partir de nbEssais, entrainement et le tableau placementsPots
             self.dictSouris["s"+str(i)].dictEssais=dictEssais
+            for nomEssai in self.dictSouris["s"+str(i)].dictEssais:
+                self.dictSouris["s"+str(i)].dictEssais[nomEssai].temps="00:00"
+                self.dictSouris["s"+str(i)].dictEssais[nomEssai].issue=-1
+
 
     def supprimerSouris(self,nom):
         del self.dictSouris[nom]
@@ -148,10 +132,6 @@ class Pattern():
         affichage+="\nentrainement: "+str(self.entrainement)
         affichage+="\ntempsMax: "+ time.strftime("%M:%S",self.tempsMax)
         affichage+="\ndateDebut:"+self.dateDebut
-        #affichage+="\ndictSouris: {"
-        #for cle in self.dictSouris:
-        #    affichage += "\n"+cle+": "+self.dictSouris[cle].affichage()
-        #affichage += "\n}"
         return affichage
 
     def toJson(self):
@@ -175,7 +155,6 @@ def savePattern(pattern):
     patternJson=pattern.toJson()
     path="Resultats/json/"+pattern.nom+".json"
     with open(path,'w') as fichierPattern:
-        #patternPickler=pickle.Pickler(fichierPattern)
         json.dump(patternJson,fichierPattern)
 
 #fonction de chargement de pattern
@@ -241,47 +220,48 @@ def transcriptionCsv(pattern):
                 else:
                     CsvWriter.writerow([' ',' ',' ',' ',nomEssai,0,essai.issue,essai.temps])
 
-def testCreationPattern():
-    nom="patternTest"
-    nbSouris=2
-    nbJours=10
-    nbEssais=3
-    entrainement=False
-    tempsMax="05:00"
-    placementPots=[[0,3.5],[0,2],[0,1]]
-    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
-    savePattern(pattern)
-    print(pattern.affichage())
-    nom="patternTest1"
-    nbSouris=2
-    nbJours=5
-    nbEssais=4
-    entrainement=True
-    tempsMax="03:00"
-    placementPots=[[-3],[-4],[0],[2]]
-    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
-    savePattern(pattern)
-    print(pattern.affichage())
-    nom="patternTest2"
-    nbSouris=4
-    nbJours=15
-    nbEssais=4
-    entrainement=False
-    tempsMax="05:30"
-    placementPots=[[1,-3.5],[1,-2],[1,-1],[1,0]]
-    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
-    savePattern(pattern)
-    print(pattern.affichage())
-
-def testCreationPattern2():
-    pattern=loadPattern("patternTest2.json")
-    print(pattern.affichage())
-    transcriptionTxt(pattern)
-    dictTest=dict()
-    dictTest=loadAllPatterns()
-    for cle in dictTest:
-        print(cle)
-        print(dictTest[cle].affichage())
+#tests pour vérifier le bon fonctionnement de la création et sauvegarde de patterns
+#def testCreationPattern():
+#    nom="patternTest"
+#    nbSouris=2
+#    nbJours=10
+#    nbEssais=3
+#    entrainement=False
+#    tempsMax="05:00"
+#    placementPots=[[0,3.5],[0,2],[0,1]]
+#    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
+#    savePattern(pattern)
+#    print(pattern.affichage())
+#    nom="patternTest1"
+#    nbSouris=2
+#    nbJours=5
+#    nbEssais=4
+#    entrainement=True
+#    tempsMax="03:00"
+#    placementPots=[[-3],[-4],[0],[2]]
+#    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
+#    savePattern(pattern)
+#    print(pattern.affichage())
+#    nom="patternTest2"
+#    nbSouris=4
+#    nbJours=15
+#    nbEssais=4
+#    entrainement=False
+#    tempsMax="05:30"
+#    placementPots=[[1,-3.5],[1,-2],[1,-1],[1,0]]
+#    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
+#    savePattern(pattern)
+#    print(pattern.affichage())
+#
+#def testCreationPattern2():
+#    pattern=loadPattern("patternTest2.json")
+#    print(pattern.affichage())
+#    transcriptionTxt(pattern)
+#    dictTest=dict()
+#    dictTest=loadAllPatterns()
+#    for cle in dictTest:
+#        print(cle)
+#        print(dictTest[cle].affichage())
 
 #testCreationPattern()
 #testCreationPattern2()

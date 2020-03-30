@@ -1,19 +1,22 @@
 import sys
 from PyQt5 import QtWidgets, uic
 from gestionStockage import *
+from chronoThread import chronoThread
 
-#TODO implémenter le chrono
-#TODO ajouter la possibilité de dupliquer les parametres d'un pattern
-#TODO retour en arrière en cas d'echec
+#sur PC
+
+#TODO +++ retour en arrière en cas d'echec
 #TODO régler les bugs de placement des pots (position initiale des sliders)
-#TODO ajouter un bouton "suivant" dans le placement de pots
-#TODO gérer la mise en forme sur la tablette
-#TODO regler le problème de l'odonancement des listes à plus de 10 essais
-#TODO afficher le pourcentage d'avancement du pattern
-#TODO créer raccourci bureau
-#TODO lancer directement au boot
-#TODO affuchage plein écran automatique
+#TODO - ajouter un bouton "suivant" dans le placement de pots
+#TODO -- afficher le pourcentage d'avancement du pattern
 
+#Sur raspberry
+
+#TODO +++ implémenter la détection USB
+#TODO ++ lancer directement au boot
+#TODO ++ affichage plein écran automatique
+#TODO créer raccourci bureau
+#TODO gérer la mise en forme sur la tablette
 
 #variables globales pour faciliter la navigation entre les menus
 Base = 0
@@ -28,7 +31,7 @@ ExperienceEssai = 8
 ConfirmationArreterExperience = 9
 PlacementPots = 10
 FinExperience = 11
-CopiePattern = 13
+CopiePattern = 12
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
@@ -53,6 +56,7 @@ class Interface(QtWidgets.QMainWindow):
         self.menuConfirmationArreterExperience = MenuConfirmationArreterExperience(self)
         self.menuPlacementPots = MenuPlacementPots(self)
         self.menuFinExperience=menuFinExperience(self)
+        self.menuCopie=menuCopie(self)
         #affiche le menu de base
         self.retourMenu()
 
@@ -102,6 +106,8 @@ class MenuCreationPattern():
         self.buttonValiderCreationPattern.clicked.connect(self.creerPattern)
         self.buttonPlacementPots = interface.findChild(QtWidgets.QPushButton, 'placementDesPots')
         self.buttonPlacementPots.clicked.connect(self.accesPlacementPots)
+        self.buttonCopierPattern = interface.findChild(QtWidgets.QPushButton, 'copierPattern')
+        self.buttonCopierPattern.clicked.connect(self.accesCopiePattern)
         #entrées utilisateur
         self.cadreNom = interface.findChild(QtWidgets.QPlainTextEdit,'cadreNomPattern')
         self.cadreNombreSouris = interface.findChild(QtWidgets.QSpinBox,'cadreNombreSouris')
@@ -117,20 +123,13 @@ class MenuCreationPattern():
         self.cadreTempsMax.timeChanged.connect(self.activerBoutonValidationCreation)
 
     def creerPattern(self):
-        #méthode partiellement fonctionnelle à teminer
+        #remplis toutes les valeurs du pattern avec le contenu des cadres du menu
         nom=self.cadreNom.toPlainText()
         nbSouris=self.cadreNombreSouris.value()
         nbJours=self.cadreNombreJours.value()
-        nbJours=self.cadreNombreJours.value()
-        #nbEssais=self.cadreNombreEssais.value #à mettre quand j'aurais géré la création auto de tableau
-        nbEssais=2
+        nbEssais=self.cadreNombreEssais.value()
         tempsMax=self.cadreTempsMax.time().toString("mm:ss") #l'affichage en mm:ss
         entrainement=self.checkModeEntrainement.isChecked()
-        #ajouter la gestion du tableau de placement
-        if(entrainement):
-            placementPots=[[0],[0]]
-        else:
-            placementPots=[[0,1],[0,1]]
         pattern=Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax)
         pattern.placementPots(interface.menuPlacementPots.dictEssais)
         savePattern(pattern)
@@ -167,6 +166,11 @@ class MenuCreationPattern():
         print("accès au menu de placement des pots")
         interface.menuPlacementPots.creationListeEssai()
         interface.selector.setCurrentIndex(PlacementPots)
+
+    def accesCopiePattern(self):
+        print("acces au menu de création par copie de pattern")
+        interface.menuCopie.afficherListePattern()
+        interface.selector.setCurrentIndex(CopiePattern)
 
 #Le menu de sélection de pattern existant
 class MenuSelectionPattern():
@@ -235,8 +239,7 @@ class MenuResultats():
 
     def export(self):
         transcriptionCsv(interface.patternActuel)
-        print("l'export USB n'est pas encore implémenté")
-        #TODO implémenter la détection USB (et ça va être long...)
+        print("Création du fichier csv dans ./Resultats/csv")
 
     def afficherListeSeries(self,interface):
         self.listeSeries.clear()
@@ -377,65 +380,104 @@ class MenuEssai():
         #buton de marche/arret du chrono
         self.buttonStartStop=interface.findChild(QtWidgets.QPushButton, 'startStopChrono')
         self.buttonStartStop.clicked.connect(self.startStopChrono)
+        #chrono
+        self.affichageChrono=interface.findChild(QtWidgets.QLabel, 'temps')
+        self.chronoRunning=False
 
-    def tempsEcoule(self):
-        print("chrono pas encore implémenté")
-        interface.essaiActuel.issue=2
-        savePattern(interface.patternActuel)
-        interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssai.nomSouris.setText(interface.sourisActuelle.nom)
-        self.updateAffichage()
-
-    def reussite(self):
-        print("accès à l'essai suivant")
-        interface.essaiActuel.issue=1
-        savePattern(interface.patternActuel)
-        interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssai.nomSouris.setText(interface.sourisActuelle.nom)
-        self.updateAffichage()
-
-    def echec(self):
-        print("retour à l'essai précédent")
-        interface.essaiActuel.issue=2
-        savePattern(interface.patternActuel)
-        interface.menuEssai.nomPattern.setText(interface.patternActuel.nom)
-        interface.menuEssai.nomSouris.setText(interface.sourisActuelle.nom)
-        self.updateAffichage()
-
-    def arretExperience(self):
-        print("accès au menu de validation de l'arrêt de l'expérience")
-        interface.selector.setCurrentIndex(ConfirmationArreterExperience)
-
+    #mise à jour de l'affichage du menu
     def updateAffichage(self):
-        #self.time=
         self.nomPattern.setText(interface.patternActuel.nom)
         self.nomSouris.setText(interface.sourisActuelle.nom)
+        self.affichageChrono.setText("00:00")
+        #si le thread chrono tourne encore, on l'arrête
+        if(self.chronoRunning):
+            self.buttonStartStop.setChecked(False)
+            self.startStopChrono()
         for nomEssai in interface.sourisActuelle.dictEssais:
             essai=interface.sourisActuelle.dictEssais[nomEssai]
             if(essai.issue==-1):
                 Interface.essaiActuel=essai
                 self.nomEssai.setText(nomEssai)
                 break
+        #gestion de la fin de la liste des essais de la souris
         if(not essai.issue==-1):
             interface.selector.setCurrentIndex(FinExperience)
         else:
             self.placementPot1.setText(str(essai.placementPot1))
+            #on ne peut pas cliquer sur les boutons tant que le chrono n'a pas été lancé
+            self.buttonReussite.setEnabled(False)
+            self.buttonEchec.setEnabled(False)
+            self.buttonTempsEcoule.setEnabled(False)
+            #s'il s'agit d'un essai E1, on n'affiche pas le placement du pot 2
             if(essai.isE2):
                 self.labelPot2.setEnabled(True)
                 self.placementPot2.setEnabled(True)
                 self.placementPot2.setText(str(essai.placementPot2))
-                self.buttonEchec.setEnabled(True)
             else:
                 self.labelPot2.setEnabled(False)
                 self.placementPot2.setEnabled(False)
                 self.placementPot2.setText('X')
-                self.buttonEchec.setEnabled(False)
 
+    #fonction appelée lorsque l'on appuie sur le bouton "Start/stop"
     def startStopChrono(self):
         if(self.buttonStartStop.isChecked()):
             print("start")
+            #thread paralllèle du chrono
+            self.chronoThread=chronoThread(interface)
+            self.chronoRunning=True
+            self.chronoThread.start()
+            self.buttonReussite.setEnabled(True)
+            if(interface.essaiActuel.isE2):
+                self.buttonEchec.setEnabled(True)
         else:
             print("stop")
+            self.chronoRunning=False
+            self.chronoThread.join()
+            interface.essaiActuel.temps=self.affichageChrono.text()
+
+    def tempsEcoule(self):
+        print("Temps écoulé, retour à l'essai E1 précédent")
+        interface.essaiActuel.issue=0
+        nomNouvelEssaiE1=list(self.nomEssai.text())
+        nomNouvelEssaiE1[4]='1'
+        i=1
+        nomNouvelEssaiE1[6]=str(i)
+        while("".join(nomNouvelEssaiE1) in interface.sourisActuelle.dictEssais):
+            i+=1
+            nomNouvelEssaiE1[6]=str(i)
+        nomNouvelEssaiE1="".join(nomNouvelEssaiE1)
+        interface.sourisActuelle.dictEssais[nomNouvelEssaiE1]=EssaiE1(interface.essaiActuel.placementPot1)
+        if(interface.essaiActuel.isE2):
+            nomNouvelEssaiE2=list(self.nomEssai.text())
+            nomNouvelEssaiE2[4]='2'
+            i=1
+            nomNouvelEssaiE2[6]=str(i)
+            while("".join(nomNouvelEssaiE2) in interface.sourisActuelle.dictEssais):
+                i+=1
+                nomNouvelEssaiE2[6]=str(i)
+        nomNouvelEssaiE2="".join(nomNouvelEssaiE2)
+        interface.sourisActuelle.dictEssais[nomNouvelEssaiE2]=EssaiE2(interface.essaiActuel.placementPot1,interface.essaiActuel.placementPot1)
+        savePattern(interface.patternActuel)
+        self.updateAffichage()
+
+    def reussite(self):
+        print("Réussite, accès à l'essai suivant")
+        interface.essaiActuel.issue=1
+        savePattern(interface.patternActuel)
+        self.updateAffichage()
+
+    def echec(self):
+        print("Echec, accès à l'essai précédent")
+        interface.essaiActuel.issue=2
+        savePattern(interface.patternActuel)
+        self.updateAffichage()
+
+    def arretExperience(self):
+        print("accès au menu de validation de l'arrêt de l'expérience")
+        if(self.chronoRunning):
+            self.startStopChrono()
+        interface.selector.setCurrentIndex(ConfirmationArreterExperience)
+
 
 #Le menu de confirmation de supression d'une souris dans un pattern
 class MenuConfirmationArreterExperience():
@@ -485,15 +527,15 @@ class MenuPlacementPots():
             self.placementPot2.setEnabled(False)
             self.sliderPot2.setEnabled(False)
         for i in range(0,interface.menuCreationPattern.cadreNombreEssais.value()):
-            nomEssai="T"+str(i)
+            nomEssai="T"+str(i).zfill(2)
             self.selecteurEssai.addItem(nomEssai)
-            self.dictEssais[nomEssai+"E1"]=EssaiE1(self.placementPot1.value())
+            self.dictEssais[nomEssai+"E1,0"]=EssaiE1(self.placementPot1.value())
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-                self.dictEssais[nomEssai+"E2"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
+                self.dictEssais[nomEssai+"E2,0"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
         self.selecteurEssai.currentIndexChanged.connect(self.selectionEssai)
 
     def selectionEssai(self):
-        if(not self.dictEssais['T0E1']==None):
+        if(not self.dictEssais['T00E1,0']==None):
             self.placementPot1.setValue(self.dictEssais[self.selecteurEssai.currentText()+"E1"].placementPot1)
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
                 self.placementPot2.setValue(self.dictEssais[self.selecteurEssai.currentText()+"E2"].placementPot2)
@@ -506,9 +548,9 @@ class MenuPlacementPots():
         if(valeur==-0.5):
             valeur=-1
         self.sliderPot1.setValue(valeur*2)
-        self.dictEssais[self.selecteurEssai.currentText()+"E1"]=EssaiE1(self.placementPot1.value())
+        self.dictEssais[self.selecteurEssai.currentText()+"E1,0"]=EssaiE1(self.placementPot1.value())
         if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
-            self.dictEssais[self.selecteurEssai.currentText()+"E2"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
+            self.dictEssais[self.selecteurEssai.currentText()+"E2,0"]=EssaiE2(self.placementPot1.value(),self.placementPot2.value())
 
     def updateSlider1(self):
         valeur=self.sliderPot1.value()/2
@@ -546,6 +588,59 @@ class menuFinExperience():
     def retourChoixSouris(self):
         interface.menuChoixSouris.affichageInfoSouris()
         interface.selector.setCurrentIndex(ChoixSouris)
+
+#menu permettant de créer un nouveau pattern à partir des paramètres d'un pattern existant
+class menuCopie():
+    def __init__(self,interface):
+        #boutons du menus
+        self.buttonCopierPattern=interface.findChild(QtWidgets.QPushButton, 'validerCopiePattern')
+        self.buttonCopierPattern.clicked.connect(self.copierPattern)
+        self.buttonRetour=interface.findChild(QtWidgets.QPushButton, 'retourCopie')
+        self.buttonRetour.clicked.connect(interface.retourMenu)
+        #affichage et entrée utilisateur du menu
+        self.listePatterns=interface.findChild(QtWidgets.QComboBox, 'listePatternsCopie')
+        self.listePatterns.currentIndexChanged.connect(self.afficherInfoPattern)
+        self.nomPattern=interface.findChild(QtWidgets.QPlainTextEdit, 'nomPatternCopie')
+        self.infoPattern=interface.findChild(QtWidgets.QLabel, 'infoPatternCopie')
+
+    def afficherListePattern(self):
+        self.listePatterns.clear()
+        for nomPattern in interface.dictPatterns:
+            self.listePatterns.addItem(interface.dictPatterns[nomPattern].nom)
+
+    def afficherInfoPattern(self):
+        texte=self.listePatterns.currentText()
+        if(texte!=''):
+            interface.patternActuel=interface.dictPatterns[texte+".json"]
+            affichage=interface.patternActuel.affichage()+"\nessais:"
+            for nomEssai in interface.patternActuel.dictSouris[list(interface.patternActuel.dictSouris.keys())[0]].dictEssais:
+                essai=interface.patternActuel.dictSouris[list(interface.patternActuel.dictSouris.keys())[0]].dictEssais[nomEssai]
+                affichage+="\n\t"+nomEssai+"\t"
+                if(essai.isE2):
+                    affichage+="["+str(essai.placementPot1)+" "+str(essai.placementPot2)+"]"
+                else:
+                    affichage+="["+str(essai.placementPot1)+"]"
+            self.infoPattern.setText(affichage)
+            i=1
+            while((texte+"("+str(i)+").json") in interface.dictPatterns):
+                i+=1
+            self.nomPattern.setPlainText(self.listePatterns.currentText()+"("+str(i)+")")
+
+    def copierPattern(self):
+        nom=self.nomPattern.toPlainText()
+        nbSouris=interface.patternActuel.nbSouris
+        nbJours=interface.patternActuel.nbJours
+        nbEssais=interface.patternActuel.nbEssais
+        entrainement=interface.patternActuel.entrainement
+        tempsMax=time.strftime("%M:%S",interface.patternActuel.tempsMax)
+        patternCopie=Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax)
+        patternCopie.placementPots(interface.patternActuel.dictSouris[list(interface.patternActuel.dictSouris.keys())[0]].dictEssais)
+        savePattern(patternCopie)
+        interface.dictPatterns=loadAllPatterns()
+        print("pattern copié et enregistré")
+        interface.retourMenu()
+
+
 
 app = QtWidgets.QApplication(sys.argv)
 interface = Interface()
