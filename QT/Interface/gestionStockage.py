@@ -16,7 +16,7 @@ class Souris():
 
     def affichage(self):
         affichage="\n  souris "+self.nom+" : "
-        for cle in self.dictEssais:
+        for cle in sorted(self.dictEssais):
             affichage += "\n    "+cle+" :"+self.dictEssais[cle].affichage()
         return affichage
 
@@ -150,11 +150,8 @@ class Pattern():
         }
         return patternJson
 
-#fonction de sauvegarde de pattern avec la bibliothèque pickle
+#fonction de sauvegarde de pattern avec la bibliothèque json
 def savePattern(pattern):
-    #on trie tous les essais par ordre alphabetique
-    #for nomSouris in pattern.dictSouris:
-    #    pattern.dictSouris[nomSouris].dictEssais = sorted(pattern.dictSouris[nomSouris].dictEssais)
     patternJson=pattern.toJson()
     path="Resultats/json/"+pattern.nom+".json"
     with open(path,'w') as fichierPattern:
