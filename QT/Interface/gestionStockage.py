@@ -4,6 +4,10 @@ import os
 import time
 import json
 import csv
+from glob import glob
+from subprocess import check_output, CalledProcessError
+
+BasePath = "/home/pi/Desktop/Roborongeurs_commun/QT/Interface/" #chemin complet vers le programme sur Raspberry, commenter cette ligne sur PC
 
 class Souris():
 
@@ -153,13 +157,13 @@ class Pattern():
 #fonction de sauvegarde de pattern avec la bibliothèque json
 def savePattern(pattern):
     patternJson=pattern.toJson()
-    path="Resultats/json/"+pattern.nom+".json"
+    path=BasePath+"Resultats/json/"+pattern.nom+".json"
     with open(path,'w') as fichierPattern:
         json.dump(patternJson,fichierPattern)
 
 #fonction de chargement de pattern
 def loadPattern(nomFichier):
-    path="Resultats/json/"+nomFichier
+    path=BasePath+"Resultats/json/"+nomFichier
     with open(path,'r') as fichierPattern:
         #créé le dictionnaire patternJson avec json.load()
         patternJson = json.load(fichierPattern)
@@ -195,7 +199,7 @@ def loadPattern(nomFichier):
 #chercher tous les fichiers présents dans le dossier Resultats/json
 #et créé un dictionnaire de patterns correspondant
 def loadAllPatterns():
-    path="./Resultats/json"
+    path=BasePath+"Resultats/json"
     dictPatterns=dict()
     listeFichiersPatterns=os.listdir(path)
     for nomPattern in listeFichiersPatterns:
@@ -203,8 +207,8 @@ def loadAllPatterns():
     return dictPatterns
 
 #Création des fichiers csv pour l'export de résultats
-def transcriptionCsv(pattern):
-    path="Resultats/csv/"+pattern.nom+".csv"
+def transcriptionCsv(pattern,USBpath):
+    path=USBpath+"/"+pattern.nom+".csv"
     with open(path, mode='w') as fichierCsv:
         CsvWriter = csv.writer(fichierCsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         CsvWriter.writerow(['Pattern','Jours','Temps max','Souris','Essai','Distance','Issue','Temps'])
@@ -220,48 +224,31 @@ def transcriptionCsv(pattern):
                 else:
                     CsvWriter.writerow([' ',' ',' ',' ',nomEssai,0,essai.issue,essai.temps])
 
-#tests pour vérifier le bon fonctionnement de la création et sauvegarde de patterns
-#def testCreationPattern():
-#    nom="patternTest"
-#    nbSouris=2
-#    nbJours=10
-#    nbEssais=3
-#    entrainement=False
-#    tempsMax="05:00"
-#    placementPots=[[0,3.5],[0,2],[0,1]]
-#    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
-#    savePattern(pattern)
-#    print(pattern.affichage())
-#    nom="patternTest1"
-#    nbSouris=2
-#    nbJours=5
-#    nbEssais=4
-#    entrainement=True
-#    tempsMax="03:00"
-#    placementPots=[[-3],[-4],[0],[2]]
-#    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
-#    savePattern(pattern)
-#    print(pattern.affichage())
-#    nom="patternTest2"
-#    nbSouris=4
-#    nbJours=15
-#    nbEssais=4
-#    entrainement=False
-#    tempsMax="05:30"
-#    placementPots=[[1,-3.5],[1,-2],[1,-1],[1,0]]
-#    pattern = Pattern(nom,nbSouris,nbJours,nbEssais,entrainement,tempsMax,placementPots)
-#    savePattern(pattern)
-#    print(pattern.affichage())
-#
-#def testCreationPattern2():
-#    pattern=loadPattern("patternTest2.json")
-#    print(pattern.affichage())
-#    transcriptionTxt(pattern)
-#    dictTest=dict()
-#    dictTest=loadAllPatterns()
-#    for cle in dictTest:
-#        print(cle)
-#        print(dictTest[cle].affichage())
+#Foctions de détection de cle USB trouvées sur StackOverflow
+def get_usb_devices():
+    sdb_devices = map(os.path.realpath, glob('/sys/block/sd*'))
+    usb_devices = (dev for dev in sdb_devices
+    if 'usb' in dev.split('/')[5])
+    return dict((os.path.basename(dev), dev) for dev in usb_devices)
 
-#testCreationPattern()
-#testCreationPattern2()
+def get_mount_points(devices=None):
+    devices = devices or get_usb_devices()  # if devices are None: get_usb_devices
+    output = check_output(['mount']).splitlines()
+    output = [tmp.decode('UTF-8') for tmp in output]
+
+    def is_usb(path):
+        return any(dev in path for dev in devices)
+    usb_info = (line for line in output if is_usb(line.split()[0]))
+    fullInfo = []
+    for info in usb_info:
+        print(info)
+        mountURI = info.split()[0]
+        usbURI = info.split()[2]
+        print(info.split().__sizeof__())
+        for x in range(3, info.split().__sizeof__()):
+            if info.split()[x].__eq__("type"):
+                for m in range(3, x):
+                    usbURI += " "+info.split()[m]
+                break
+        fullInfo.append([mountURI, usbURI])
+    return fullInfo

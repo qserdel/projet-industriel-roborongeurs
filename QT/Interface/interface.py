@@ -1,5 +1,5 @@
 import sys
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 from gestionStockage import *
 from chronoThread import chronoThread
 
@@ -24,15 +24,18 @@ ConfirmationArreterExperience = 8
 PlacementPots = 9
 FinExperience = 10
 CopiePattern = 11
+BasePath = "/home/pi/Desktop/Roborongeurs_commun/QT/Interface/" #chemin complet vers le programme sur Raspberry, commenter cette ligne sur PC
 
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
     def __init__(self):
         super(Interface, self).__init__()
+        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         #charge touts les patterns stockés en json
         self.dictPatterns=loadAllPatterns()
         #charge le fichier .ui de l'interface
-        uic.loadUi('interface.ui', self)
+        uic.loadUi(BasePath+'interface.ui', self)
         #créé le selecteur de menu
         self.selector = self.findChild(QtWidgets.QStackedWidget, 'stackedWidget')
         #créé tous les menus de l'interface
@@ -77,13 +80,19 @@ class MenuBase():
         print('Accès au menu de création de pattern')
         interface.selector.setCurrentIndex(CreationPattern)
         interface.menuCreationPattern.clearAll()
+        
     def accesSelectionPattern(self):
         print('Accès au menu de séléction de pattern')
         interface.selector.setCurrentIndex(SelectionPattern)
         interface.menuSelectionPattern.afficherListePattern(interface)
+        
     def accesResultats(self):
         print('Accès au menu des résultats')
         interface.menuResultats.afficherListeSeries(interface)
+        if(get_mount_points()==[]):
+            interface.menuResultats.buttonExportUSB.setText("Insérer une clé USB puis cliquer ici por exporter")
+        else:
+            interface.menuResultats.buttonExportUSB.setText("Export USB")
         interface.selector.setCurrentIndex(Resultats)
 
 #Le menu de création de pattern
@@ -230,8 +239,17 @@ class MenuResultats():
         interface.menuConfirmationSuppressionSerie.nomSerie.setText(interface.patternActuel.nom)
 
     def export(self):
-        transcriptionCsv(interface.patternActuel)
-        print("Création du fichier csv dans ./Resultats/csv")
+        #on récupère la liste des clés USB branchées
+        listeUSB=get_mount_points()
+        #Si la liste n'est pas vide on créé le fichier dans la première clé de la liste
+        if(not listeUSB==[]):
+            USBpath=listeUSB[0][1]
+            print(USBpath)
+            transcriptionCsv(interface.patternActuel,USBpath)
+            print("Création du fichier csv dans ./Resultats/csv")
+            self.buttonExportUSB.setText("Fichier exporté avec succès !")
+        else:
+            self.buttonExportUSB.setText("Insérer une clé USB puis cliquer ici por exporter")
 
     def afficherListeSeries(self,interface):
         self.listeSeries.clear()
@@ -258,7 +276,7 @@ class MenuConfirmationSuppressionSerie():
         self.nomSerie = interface.findChild(QtWidgets.QLabel, 'nomSerieASupprimer')
 
     def supprimerSerie(self):
-        path="Resultats/json/"+interface.patternActuel.nom+".json"
+        path=BasePath+"Resultats/json/"+interface.patternActuel.nom+".json"
         print('suppression du pattern/série: '+path)
         os.remove(path)
         interface.dictPatterns=loadAllPatterns()
@@ -636,5 +654,5 @@ class menuCopie():
 
 app = QtWidgets.QApplication(sys.argv)
 interface = Interface()
-interface.show()
+interface.showMaximized()
 app.exec_()
