@@ -1,5 +1,3 @@
-#TODO plein ecran
-
 import os
 import time
 import json
@@ -7,8 +5,8 @@ import csv
 from glob import glob
 from subprocess import check_output, CalledProcessError
 
-BasePath = "/home/pi/Desktop/Roborongeurs_commun/QT/Interface/" #chemin complet vers le programme sur Raspberry, commenter cette ligne sur PC
-
+#BasePath = "/home/pi/Desktop/Roborongeurs_commun/QT/Interface/" #chemin complet vers le programme sur Raspberry, commenter cette ligne sur PC
+BasePath=""
 class Souris():
 
     def __init__(self,nom):
@@ -73,7 +71,7 @@ class EssaiE2():
         self.placementPot2=placementPot2
 
     def affichage(self):
-        affichage="\t["+str(self.placementPot1)+" "+str(self.placementPot2)+"]\t"+self.issueToString()
+        affichage="\t["+str(self.placementPot1)+"|"+str(self.placementPot2)+"]\t"+self.issueToString()
         return affichage
 
     def toJson(self):
@@ -208,21 +206,29 @@ def loadAllPatterns():
 
 #Création des fichiers csv pour l'export de résultats
 def transcriptionCsv(pattern,USBpath):
-    path=USBpath+"/"+pattern.nom+".csv"
+    path=USBpath+"/"+pattern.nom+"_infos.csv"
+    path="Resultats/csv/"+pattern.nom+"_infos.csv"
     with open(path, mode='w') as fichierCsv:
         CsvWriter = csv.writer(fichierCsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        CsvWriter.writerow(['Pattern','Jours','Temps max','Souris','Essai','Distance','Issue','Temps'])
-        CsvWriter.writerow([pattern.nom,pattern.nbJours,time.strftime("%M:%S",pattern.tempsMax)])
+        CsvWriter.writerow(['Pattern','Jours','Temps max','nb Souris','nb Essais'])
+        CsvWriter.writerow([pattern.nom,pattern.nbJours,time.strftime("%M:%S",pattern.tempsMax),pattern.nbSouris,pattern.nbEssais])
+    path=USBpath+"/"+pattern.nom+"_resultats.csv"
+    path="Resultats/csv/"+pattern.nom+"_resultats.csv"
+    with open(path, mode='w') as fichierCsv:
+        CsvWriter = csv.writer(fichierCsv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        CsvWriter.writerow(['Souris','Essai','Pot1','Pot2','Distance(cm)','Issue','Temps(s)'])
         for nomSouris in pattern.dictSouris:
             souris=pattern.dictSouris[nomSouris]
-            CsvWriter.writerow([' ',' ',' ',nomSouris])
             for nomEssai in sorted(souris.dictEssais):
                 essai=souris.dictEssais[nomEssai]
+                #temps en secondes
+                temps=int(essai.temps[0]+essai.temps[1])*60+int(essai.temps[3]+essai.temps[4])
                 if(essai.isE2):
-                    distance=abs(essai.placementPot1-essai.placementPot2)
-                    CsvWriter.writerow([' ',' ',' ',' ',nomEssai,distance,essai.issue,essai.temps])
+                    #distance entre les pots en cm
+                    distance=abs(essai.placementPot1-essai.placementPot2)*15
+                    CsvWriter.writerow([nomSouris,nomEssai,essai.placementPot1,essai.placementPot2,distance,essai.issue,temps])
                 else:
-                    CsvWriter.writerow([' ',' ',' ',' ',nomEssai,0,essai.issue,essai.temps])
+                    CsvWriter.writerow([nomSouris,nomEssai,essai.placementPot1,"#N/A","#N/A",essai.issue,temps])
 
 #Foctions de détection de cle USB trouvées sur StackOverflow
 def get_usb_devices():

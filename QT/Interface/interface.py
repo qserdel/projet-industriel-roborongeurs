@@ -3,14 +3,6 @@ from PyQt5 import QtWidgets, uic, QtCore
 from gestionStockage import *
 from chronoThread import chronoThread
 
-#Sur raspberry
-
-#TODO +++ implémenter la détection USB
-#TODO ++ lancer directement au boot
-#TODO ++ affichage plein écran automatique
-#TODO créer raccourci bureau
-#TODO gérer la mise en forme sur la tablette
-
 #variables globales pour faciliter la navigation entre les menus
 Base = 0
 CreationPattern = 1
@@ -24,8 +16,9 @@ ConfirmationArreterExperience = 8
 PlacementPots = 9
 FinExperience = 10
 CopiePattern = 11
-BasePath = "/home/pi/Desktop/Roborongeurs_commun/QT/Interface/" #chemin complet vers le programme sur Raspberry, commenter cette ligne sur PC
-
+Aide = 12
+#BasePath = "/home/pi/Desktop/Roborongeurs_commun/QT/Interface/" #chemin complet vers le programme sur Raspberry, commenter cette ligne sur PC
+BasePath=""
 #La classe globale qui gère la création et la navigation pour tous les menus
 class Interface(QtWidgets.QMainWindow):
     def __init__(self):
@@ -51,6 +44,7 @@ class Interface(QtWidgets.QMainWindow):
         self.menuPlacementPots = MenuPlacementPots(self)
         self.menuFinExperience=menuFinExperience(self)
         self.menuCopie=menuCopie(self)
+        self.menuAide=menuAide(self)
         #affiche le menu de base
         self.retourMenu()
 
@@ -74,18 +68,20 @@ class MenuBase():
         self.buttonAccesResultats.clicked.connect(self.accesResultats)
         self.buttonAccesSelectionPattern = interface.findChild(QtWidgets.QPushButton, 'accesSelectionPattern')
         self.buttonAccesSelectionPattern.clicked.connect(self.accesSelectionPattern)
+        self.buttonAide=interface.findChild(QtWidgets.QPushButton, 'aide')
+        self.buttonAide.clicked.connect(self.accesAide)
 
     def accesCreationPattern(self):
         interface.menuCreationPattern.clearAll()
         print('Accès au menu de création de pattern')
         interface.selector.setCurrentIndex(CreationPattern)
         interface.menuCreationPattern.clearAll()
-        
+
     def accesSelectionPattern(self):
         print('Accès au menu de séléction de pattern')
         interface.selector.setCurrentIndex(SelectionPattern)
         interface.menuSelectionPattern.afficherListePattern(interface)
-        
+
     def accesResultats(self):
         print('Accès au menu des résultats')
         interface.menuResultats.afficherListeSeries(interface)
@@ -94,6 +90,10 @@ class MenuBase():
         else:
             interface.menuResultats.buttonExportUSB.setText("Export USB")
         interface.selector.setCurrentIndex(Resultats)
+
+    def accesAide(self):
+        print("accès au guide utilisateur")
+        interface.selector.setCurrentIndex(Aide)
 
 #Le menu de création de pattern
 class MenuCreationPattern():
@@ -250,6 +250,8 @@ class MenuResultats():
             self.buttonExportUSB.setText("Fichier exporté avec succès !")
         else:
             self.buttonExportUSB.setText("Insérer une clé USB puis cliquer ici por exporter")
+            USBpath="";
+            transcriptionCsv(interface.patternActuel,USBpath)
 
     def afficherListeSeries(self,interface):
         self.listeSeries.clear()
@@ -304,7 +306,7 @@ class MenuChoixSouris():
         #affichage des infos de la souris selectionnée
         self.infoSouris = interface.findChild(QtWidgets.QLabel, 'infoSouris')
         self.listeSouris.currentIndexChanged.connect(self.affichageInfoSouris)
-#ici
+
     def accesEssai(self):
         print('lancement de l\'expérience')
         interface.selector.setCurrentIndex(ExperienceEssai)
@@ -357,7 +359,7 @@ class MenuEssai():
         self.buttonEchec = interface.findChild(QtWidgets.QPushButton, 'echec')
         self.buttonEchec.clicked.connect(self.echec)
         self.buttonArretExperience = interface.findChild(QtWidgets.QPushButton, 'arreterExperience')
-        self.buttonArretExperience.clicked.connect(self.arretExperience)
+        self.buttonArretExperience.clicked.connect(self.accesConfirmationArret)
         #nom du pattern actuel
         self.nomPattern= interface.findChild(QtWidgets.QLabel, 'nomPatternEssai')
         #nom de la souris actuelle
@@ -475,9 +477,13 @@ class MenuEssai():
         self.updateAffichage()
 
     def arretExperience(self):
-        print("accès au menu de validation de l'arrêt de l'expérience")
+        print("arrêt de l'expérience en cours")
         if(self.chronoRunning):
             self.startStopChrono()
+        interface.retourMenu()
+
+    def accesConfirmationArret(self):
+        print("acces au menu de confirmation d'arrêt de l'expérience")
         interface.selector.setCurrentIndex(ConfirmationArreterExperience)
 
 
@@ -487,7 +493,7 @@ class MenuConfirmationArreterExperience():
         self.interface=interface
         #boutons du menu
         self.buttonValiderArretExperience = interface.findChild(QtWidgets.QPushButton, 'validerArretExperience')
-        self.buttonValiderArretExperience.clicked.connect(interface.retourMenu)
+        self.buttonValiderArretExperience.clicked.connect(interface.menuEssai.arretExperience)
         self.buttonAnnulerArretExperience = interface.findChild(QtWidgets.QPushButton, 'annulerArretExperience')
         self.buttonAnnulerArretExperience.clicked.connect(self.retourExperience)
 
@@ -529,7 +535,7 @@ class MenuPlacementPots():
             self.placementPot2.setEnabled(False)
             self.sliderPot2.setEnabled(False)
         for i in range(0,interface.menuCreationPattern.cadreNombreEssais.value()):
-            nomEssai="T"+str(i).zfill(2)
+            nomEssai="T"+str(i).zfill(3)
             self.selecteurEssai.addItem(nomEssai)
             self.dictEssais[nomEssai+"E1"]=EssaiE1(0)
             if(not interface.menuCreationPattern.checkModeEntrainement.isChecked()):
@@ -650,7 +656,10 @@ class menuCopie():
         print("pattern copié et enregistré")
         interface.retourMenu()
 
-
+class menuAide():
+    def __init__(self,interface):
+        self.buttonRetourMenu=interface.findChild(QtWidgets.QPushButton, 'retourGuide')
+        self.buttonRetourMenu.clicked.connect(interface.retourMenu)
 
 app = QtWidgets.QApplication(sys.argv)
 interface = Interface()
