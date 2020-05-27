@@ -1,1 +1,31 @@
-Voici le repository pour le code commande et interface de l'équipe ROB4 Roborongeurs
+Voici le repository pour le code commande et interface de l'équipe ROB4 Roborongeurs.
+
+Tout le code relatif au fonctionnement de l'interface tactile se trouve dans le dossier QT/Interface, il s'agit du chemin "de base" pour tout appel système de l'interface.
+
+Lorsque l'utilisateur allume la carte raspberry, le menu de base de l'interface s'ouvre directement.
+Il peut choisir entre 3 menus: Création de pattern, Resultats et Selection de pattern.
+
+Le premier lui permet de crééer un nouveau pattern en spécifiant le nom, le nombre de jours, de souris, d'essais par souris, le temps maximum et si le pattern est un entrainement ou non. Il peut ensuite choisir le placement des pots pour chaque essai sur un autre menu en appuyant sur le bouton "placement des pots". Il peut aussi copier les paramètres d'un pattern existant avec le bouton "copier pattern".
+
+Le second lui permet de sélectionner un pattern existant pour l'exporter sur une clé USB préalablement branchée à la carte où pour le supprimer. Une fenêtre récapitulative lui permet d'être sûr de manipuler le bon pattern.
+
+Le troisième lui permet de sélectionner un pattern pour démarrer ou continuer l'éxpérience que ce dernier encadre. Il peut aussi supprimer le pattern sur ce menu. Lorsque l'utilisateur a séléctionné un pattern, il doit ensuite séléctionner une souris avec laquelle travailler. L'avancement de chaque souris dans le pattern est visible sur la fenêtre dédiée.
+Lorsqu'une souris est séléctionnée, le menu de l'expérience s'ouvre. Il contient toutes les informations de l'essai en cours: son pattern, sa souris, son identifiant, le type d'essai et le placement des pots. Lorsque l'utilisateur appuie sur le bouton Start/Stop, le chrono de l'expérience démarre. Il peut alors ensuite appuyer sur les boutons "Réussite" et "Echec" pour terminer l'essai, ou sur le bouton "Temps écoulé" lorsque le chrono dépasse le temps maximum du pattern. Dans ce dernier cas, uen copie de l'essai est créée et la souris reprends au début du duplet {E1,E2} correspondant. L'utilisateur peut mettre fin à l'expérience et retourner au menu de base dés qu'il le souhaite, les résultats de l'essai en cours seront alors supprimés mais ceux des éssais précédents seront sauvegardés.  
+
+Les parametres et résultats des patterns créés sont stockés au format json dans le dossier Resultats/json. Ils sont tous chargés lors du démarrage de l'interface. Les résultats au format csv (excel) sont créés lorsque l'utilisateur choisit d'exporter un pattern. Ils sont stockés d'une part sur clé USB lorsque celle ci est insérée dans un port de la carte, et d'autre part dans le dossier Resultats/csv. Deux fichiers csv différents sont créés à chaque export de pattern: le fichier [nom]_infos.csv contient les paramètres du pattern et le fichier [nom]_resultats.csv contient les résultats des expériences dans un arrangement plus pratique à traiter sous excel. Les csv sont supprimés de ce dossier avec les fichiers json correspondants lorsque l'utilisateur choisit de supprimer un pattern. 
+Voici une ligne de commande pour lire les fichiers csv directement sur le terminal Linux: column -s, -t < [nom].csv | less -#2 -N -S
+
+Les menus graphiques de l'Interface ont été fait à l'aide de QT Designer et se trouvent dans le fichier interface.ui
+Pour l'ouvrir et le modifier avec QT Designer, entrer cette ligne de commande dans le terminal: qtchooser -run-tool=designer -qt=5 &
+
+Le dossier Interface contient 3 fichiers code python:
+
+Le premier: interface.py contient la classe "interface" de base qui créé et gère les menus et fait le lien enter les objets Python et les objets QT correspondants via le fichier interface.ui.
+Il contient aussi toutes les classes des menus de l'interface. Lors de l'execution du programme, chaque classe menu a une instance propre et les actions éxecutables via un menu sont matérialisées par les fonctions propres à sa classe. La navgation entre les menus se fait à l'aide d'un objet QT 'stackedWidget', en changeant la variable 'currentIndex' de cet objet.
+
+Le deuxième: gestionStockage.py contient les classes Pattern, Souris, EssaiE1 et EssaiE2. En plus de ses paramètres, un objet de la classe pattern possède un dictionnaire de souris. Chaque souris possède un dictionnaire d'essais (types E1 et E2). Chaque essai renseigne son type, son issue, le temps mis à être réalisé, ... Chacune de ces classes a une fonction de traduction au format JSON qui lui permettra d'être stockée dans un fichier et facilement réexploitable. Le fichier gestionStockage.py contient enfin des fonctions statiques permettant de sauvegarder un pattern en créant un fichier json, de charger un pattern depuis un fichier json, de charger tous les patterns stockés dans le dossier Resultats/json, de transcrire et sauvegarder des résultats au format csv, et de détecter une clé USB en y sauvegardant des fichiers résultats.
+
+Le dernier: chronoThread.py, permet de créer un processus parallèle pendant le déroulement de l'expérience pour faire tourner le chrono tout en laissant la main à l'utilisateur sur le menu.
+
+Tout ce qui concerne l'interface à proprement parler a été réalisé, hormis le guide utilisateur qu'il reste à remplir. Lorsque vous devrez implémenter le dialogue avec la carte Arduino de la table, je vous conseil d'écrire le code gérant l'envoi des postitions des pots de l'interface à la table en complétant la fonction updateAffichage() de la classe menuEssai() du fichier interface.py.
+
