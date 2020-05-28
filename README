@@ -2,6 +2,8 @@ Voici le repository pour le code commande et interface de l'équipe ROB4 Roboron
 
 Tout le code relatif au fonctionnement de l'interface tactile se trouve dans le dossier QT/Interface, il s'agit du chemin "de base" pour tout appel système de l'interface.
 
+Pour lancer manuellement le programme de l'interface: ouvrir un terminal dans ce dossier et executer la commande: python3 interface.py
+
 Lorsque l'utilisateur allume la carte raspberry, le menu de base de l'interface s'ouvre directement.
 Il peut choisir entre 3 menus: Création de pattern, Resultats et Selection de pattern.
 
